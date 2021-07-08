@@ -9,7 +9,7 @@ import { ObservationContext } from '../context/ObservationsContext';
 const SearchModal = () => {
   const { searchForm, setSearchForm, setQuery } = useContext(ObservationContext);
   const [show, setShow] = useState(false);
-  const { latitude, longitude } = searchForm;
+  const { minLon, maxLon, minLat, maxLat } = searchForm;
 
   const toggleShow = () => setShow(prev => !prev);
 
@@ -42,17 +42,35 @@ const SearchModal = () => {
             <Row>
               <Col>
                 <Form.Control
-                  placeholder='Latitude'
-                  name='latitude'
-                  value={latitude}
+                  placeholder='Min longitude'
+                  name='minLon'
+                  value={minLon}
                   onChange={handleChange}
                 />
               </Col>
               <Col>
                 <Form.Control
-                  placeholder='Longitude'
-                  name='longitude'
-                  value={longitude}
+                  placeholder='Max longitude'
+                  name='maxLon'
+                  value={maxLon}
+                  onChange={handleChange}
+                />
+              </Col>
+            </Row>
+            <Row>
+              <Col>
+                <Form.Control
+                  placeholder='Min latitude'
+                  name='minLat'
+                  value={minLat}
+                  onChange={handleChange}
+                />
+              </Col>
+              <Col>
+                <Form.Control
+                  placeholder='Max latitude'
+                  name='maxLat'
+                  value={maxLat}
                   onChange={handleChange}
                 />
               </Col>

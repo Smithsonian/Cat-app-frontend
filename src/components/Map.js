@@ -28,18 +28,25 @@ const Map = () => {
     <LoadScript googleMapsApiKey={process.env.REACT_APP_GOOGLE_MAPS_API_KEY}>
       <GoogleMap mapContainerStyle={containerStyle} center={center} zoom={10}>
         <Rectangle onLoad={onLoad} bounds={bounds} editable draggable />
-        {observations.map(({ _id, latitude, longitude }) => (
-          <Marker
-            icon={
-              'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png'
+        {observations.map(
+          ({
+            _id,
+            location: {
+              coordinates: [lng, lat]
             }
-            key={_id}
-            position={{
-              lat: parseFloat(latitude),
-              lng: parseFloat(longitude)
-            }}
-          />
-        ))}
+          }) => (
+            <Marker
+              icon={
+                'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png'
+              }
+              key={_id}
+              position={{
+                lat,
+                lng
+              }}
+            />
+          )
+        )}
       </GoogleMap>
     </LoadScript>
   );

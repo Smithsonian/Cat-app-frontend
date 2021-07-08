@@ -24,9 +24,9 @@ const NavigationBar = () => {
         <Navbar.Collapse id='navbarScroll'>
           <Nav className='ml-auto'>
             <Nav.Link as={Link} to='/'>
-              Home
+              Observations
             </Nav.Link>
-            <Nav.Link as={Link} to='/'>
+            <Nav.Link as={Link} to='/admin'>
               Admin
             </Nav.Link>
             <Nav.Link onClick={signOut}>Sign out</Nav.Link>
