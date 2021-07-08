@@ -16,7 +16,7 @@ const NavigationBar = () => {
       expanded={expanded}
       onSelect={() => setExpanded(false)}
     >
-      <Container>
+      <Container fluid>
         <Navbar.Brand as={Link} to='/'>
           Count cats 🐾
         </Navbar.Brand>

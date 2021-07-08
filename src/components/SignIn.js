@@ -27,7 +27,7 @@ const SignIn = () => {
     signIn(data);
   };
 
-  if (isAuthenticated) return <Redirect to='/secret' />;
+  if (isAuthenticated) return <Redirect to='/observations' />;
   return (
     <Container>
       <Row className='flex-column justify-content-center align-items-center vh-100'>

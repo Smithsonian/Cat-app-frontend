@@ -7,7 +7,7 @@ const App = () => {
   return (
     <Switch>
       <Route exact path='/' component={SignIn} />
-      <ProtectedRoute exact path='/secret' component={NewObservations} />
+      <ProtectedRoute exact path='/observations' component={NewObservations} />
     </Switch>
   );
 };

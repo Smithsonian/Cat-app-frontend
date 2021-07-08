@@ -1,23 +1,46 @@
-import { GoogleMap, LoadScript } from '@react-google-maps/api';
+import { memo, useState } from 'react';
+import { GoogleMap, LoadScript, Rectangle, Marker } from '@react-google-maps/api';
 
-const Map = () => {
+const Map = ({ observations }) => {
+  const [bounds, setBounds] = useState({
+    north: 0,
+    south: 0,
+    east: 0,
+    west: 0
+  });
+
   const containerStyle = {
-    width: '400px',
-    height: '400px'
+    width: '100%',
+    minHeight: 'calc(100vh - 65px)'
   };
 
   const center = {
-    lat: -3.745,
-    lng: -38.523
+    lat: 38.9072,
+    lng: -77.0369
   };
 
+  const onLoad = rectangle => {
+    console.log('rectangle: ', rectangle);
+  };
   return (
-    <LoadScript googleMapsApiKey='AIzaSyCwFhNfWkO90DI57HdNmE68nWV2210PEIg'>
+    <LoadScript googleMapsApiKey={process.env.REACT_APP_GOOGLE_MAPS_API_KEY}>
       <GoogleMap mapContainerStyle={containerStyle} center={center} zoom={10}>
-        {/* Child components, such as markers, info windows, etc. */}
+        <Rectangle onLoad={onLoad} bounds={bounds} editable draggable />
+        {observations.map(({ _id, latitude, longitude }) => (
+          <Marker
+            icon={
+              'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png'
+            }
+            key={_id}
+            position={{
+              lat: parseFloat(latitude),
+              lng: parseFloat(longitude)
+            }}
+          />
+        ))}
       </GoogleMap>
     </LoadScript>
   );
 };
 
-export default Map;
+export default memo(Map);

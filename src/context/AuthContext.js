@@ -1,4 +1,5 @@
 import { createContext, useState, useEffect, useCallback } from 'react';
+import setAuthToken from '../utils/setAuthToken';
 
 export const AuthContext = createContext();
 
@@ -23,6 +24,7 @@ const AuthState = ({ children }) => {
       );
       const { success, user, error } = await res.json();
       if (success) {
+        setAuthToken(token);
         setIsAuthenticated(true);
         setUser(user);
         setLoading(false);
@@ -57,6 +59,7 @@ const AuthState = ({ children }) => {
     if (token) {
       localStorage.setItem('token', token);
       setToken(token);
+      setAuthToken(token);
       setIsAuthenticated(true);
       setLoading(false);
     }

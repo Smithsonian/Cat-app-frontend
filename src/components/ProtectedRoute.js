@@ -9,7 +9,7 @@ const ProtectedRoute = ({ component: Component, ...rest }) => {
   return isAuthenticated ? (
     <Fragment>
       <NavigationBar />
-      <Container>
+      <Container fluid>
         <Route {...rest} render={() => <Component />} />
       </Container>
     </Fragment>
