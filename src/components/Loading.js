@@ -7,7 +7,7 @@ const Loading = () => {
   return (
     <Col md={4}>
       <Row className='flex-column'>
-        <Image src={catGif} alt='Loading' />
+        <Image src={catGif} className='img-fluid' alt='Loading' />
         <h2 className='text-center'>Loading...</h2>
       </Row>
     </Col>
