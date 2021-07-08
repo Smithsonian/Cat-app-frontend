@@ -1,7 +1,9 @@
-import { memo, useState } from 'react';
+import { memo, useState, useContext } from 'react';
 import { GoogleMap, LoadScript, Rectangle, Marker } from '@react-google-maps/api';
+import { ObservationContext } from '../context/ObservationsContext';
 
-const Map = ({ observations }) => {
+const Map = () => {
+  const { observations } = useContext(ObservationContext);
   const [bounds, setBounds] = useState({
     north: 0,
     south: 0,
@@ -11,7 +13,7 @@ const Map = ({ observations }) => {
 
   const containerStyle = {
     width: '100%',
-    minHeight: 'calc(100vh - 65px)'
+    minHeight: 'calc(100vh - 80px)'
   };
 
   const center = {

@@ -76,18 +76,12 @@ const AuthState = ({ children }) => {
     setTimeout(() => setError(null), 3000);
   };
 
-  const clearError = () => {
-    setError(null);
-  };
-
   useEffect(() => {
     verifySession();
   }, [verifySession]);
 
   return (
-    <AuthContext.Provider
-      value={{ loading, isAuthenticated, token, user, error, signIn, signOut, clearError }}
-    >
+    <AuthContext.Provider value={{ loading, isAuthenticated, token, user, error, signIn, signOut }}>
       {children}
     </AuthContext.Provider>
   );
