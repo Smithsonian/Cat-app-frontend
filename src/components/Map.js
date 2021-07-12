@@ -1,54 +1,84 @@
-import { memo, useState, useContext } from 'react';
-import { GoogleMap, LoadScript, Rectangle, Marker } from '@react-google-maps/api';
+import { memo, useState, useContext, useCallback } from 'react';
+import { GoogleMap, useJsApiLoader, Marker, MarkerClusterer } from '@react-google-maps/api';
+import Row from 'react-bootstrap/Row';
 import { ObservationContext } from '../context/ObservationsContext';
+import {
+  optionsMap,
+  containerStyleMap,
+  centerMap,
+  optionsCluster,
+  labelsCluster,
+  clusterOnClick
+} from '../utils/mapConfig';
+import Loading from './Loading';
 
 const Map = () => {
-  const { observations } = useContext(ObservationContext);
-  const [bounds, setBounds] = useState({
-    north: 0,
-    south: 0,
-    east: 0,
-    west: 0
+  const { isLoaded, loadError } = useJsApiLoader({
+    googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY
   });
+  const [map, setMap] = useState(null);
+  const { observations } = useContext(ObservationContext);
 
-  const containerStyle = {
-    width: '100%',
-    minHeight: 'calc(100vh - 80px)'
-  };
+  const onLoadMap = useCallback(map => {
+    console.log('Mount...');
+    setMap(map);
+  }, []);
 
-  const center = {
-    lat: 38.9072,
-    lng: -77.0369
-  };
+  const onUnmountMap = useCallback(map => {
+    console.log('Unmount...');
+    setMap(null);
+  }, []);
 
-  const onLoad = rectangle => {
-    console.log('rectangle: ', rectangle);
-  };
+  if (loadError) return <div>Map cannot be loaded right now, sorry.</div>;
+
+  if (!isLoaded)
+    return (
+      <Row
+        className='flex-column justify-content-center align-items-center'
+        style={containerStyleMap}
+      >
+        <Loading />
+      </Row>
+    );
+
   return (
-    <LoadScript googleMapsApiKey={process.env.REACT_APP_GOOGLE_MAPS_API_KEY}>
-      <GoogleMap mapContainerStyle={containerStyle} center={center} zoom={10}>
-        <Rectangle onLoad={onLoad} bounds={bounds} editable draggable />
-        {observations.map(
-          ({
-            _id,
-            location: {
-              coordinates: [lng, lat]
-            }
-          }) => (
-            <Marker
-              icon={
-                'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png'
-              }
-              key={_id}
-              position={{
-                lat,
-                lng
-              }}
-            />
+    <GoogleMap
+      options={optionsMap}
+      mapContainerStyle={containerStyleMap}
+      center={centerMap}
+      zoom={10}
+      onLoad={onLoadMap}
+      onUnmount={onUnmountMap}
+    >
+      <MarkerClusterer options={optionsCluster} onClick={clusterOnClick}>
+        {clusterer =>
+          observations.map(
+            (
+              {
+                _id,
+                location: {
+                  coordinates: [lng, lat]
+                }
+              },
+              i
+            ) => (
+              <Marker
+                icon={
+                  'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png'
+                }
+                key={_id}
+                position={{
+                  lat,
+                  lng
+                }}
+                label={labelsCluster[i % labelsCluster.length]}
+                clusterer={clusterer}
+              />
+            )
           )
-        )}
-      </GoogleMap>
-    </LoadScript>
+        }
+      </MarkerClusterer>
+    </GoogleMap>
   );
 };
 

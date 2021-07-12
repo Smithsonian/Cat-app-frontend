@@ -7624,6 +7624,11 @@ normalize-url@^3.0.0:
   resolved "https://registry.yarnpkg.com/normalize-url/-/normalize-url-3.3.0.tgz#b2e1c4dc4f7c6d57743df733a4f5978d18650559"
   integrity sha512-U+JJi7duF1o+u2pynbp2zXDW2/PADgC30f0GsHZtRh+HOcXHnw137TrNlyxxRvWW5fjKd3bcLHPxofWuCjaeZg==
 
+npm-overlapping-marker-spiderfier@^1.0.3:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/npm-overlapping-marker-spiderfier/-/npm-overlapping-marker-spiderfier-1.0.3.tgz#4099e3645cd9371de151c924ced406db9b3d4a28"
+  integrity sha1-QJnjZFzZNx3hUckkztQG25s9Sig=
+
 npm-run-path@^2.0.0:
   version "2.0.2"
   resolved "https://registry.yarnpkg.com/npm-run-path/-/npm-run-path-2.0.2.tgz#35a9232dfa35d7067b4cb2ddf2357b1871536c5f"
