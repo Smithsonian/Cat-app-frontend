@@ -21,38 +21,48 @@ const ObservationState = ({ children }) => {
   const getNewObservations = useCallback(async () => {
     if (axios.defaults.headers.common['token']) {
       setLoading(true);
-      const {
-        data: { observations, pagination, error }
-      } = await axios.get(
-        `${process.env.REACT_APP_OBSERVATION_API}/observations?${new URLSearchParams(query)}`
-      );
-      if (error) {
-        reportError(error);
+      try {
+        const {
+          data: { observations, pagination, error }
+        } = await axios.get(
+          `${process.env.REACT_APP_OBSERVATION_API}/observations?${new URLSearchParams(query)}`
+        );
+        if (error) {
+          reportError(error);
+          setLoading(false);
+        }
+        setNewObservations(observations);
+        setPaginationNew(pagination);
+        setLoading(false);
+      } catch (error) {
+        reportError('Service is offline. Contact your admin');
         setLoading(false);
       }
-      setNewObservations(observations);
-      setPaginationNew(pagination);
-      setLoading(false);
     }
   }, [query]);
 
   const getObservationsForReview = useCallback(async () => {
     if (axios.defaults.headers.common['token']) {
       setLoading(true);
-      const {
-        data: { observations, pagination, error }
-      } = await axios.get(
-        `${process.env.REACT_APP_OBSERVATION_API}/observations?forReview=true&${new URLSearchParams(
-          query
-        )}`
-      );
-      if (error) {
-        reportError(error);
+      try {
+        const {
+          data: { observations, pagination, error }
+        } = await axios.get(
+          `${
+            process.env.REACT_APP_OBSERVATION_API
+          }/observations?forReview=true&${new URLSearchParams(query)}`
+        );
+        if (error) {
+          reportError(error);
+          setLoading(false);
+        }
+        setObservationsForReview(observations);
+        setPaginationReview(pagination);
+        setLoading(false);
+      } catch (error) {
+        reportError('Service is offline. Contact your admin');
         setLoading(false);
       }
-      setObservationsForReview(observations);
-      setPaginationReview(pagination);
-      setLoading(false);
     }
   }, [query]);
 

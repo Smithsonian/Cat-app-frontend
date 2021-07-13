@@ -8,6 +8,7 @@ import { AuthContext } from '../../context/AuthContext';
 const NavigationBar = () => {
   const { signOut } = useContext(AuthContext);
   const [expanded, setExpanded] = useState(false);
+
   return (
     <Navbar
       bg='light'

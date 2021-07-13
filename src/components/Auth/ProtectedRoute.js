@@ -6,6 +6,7 @@ import { AuthContext } from '../../context/AuthContext';
 const ProtectedRoute = ({ component: Component, ...rest }) => {
   const { pathname } = useLocation();
   const { isAuthenticated } = useContext(AuthContext);
+
   return isAuthenticated ? (
     <Fragment>
       <Container fluid>

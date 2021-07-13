@@ -9,6 +9,7 @@ import ObservationList from './ObservationList';
 
 const Observations = () => {
   const { loading, newObservations, observationsForReview } = useContext(ObservationContext);
+
   return (
     <Fragment>
       <Row>

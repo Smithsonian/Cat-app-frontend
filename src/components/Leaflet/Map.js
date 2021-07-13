@@ -7,6 +7,7 @@ import ObservationItem from '../Observations/ObservationItem';
 
 const Map = () => {
   const { newObservations, observationsForReview } = useContext(ObservationContext);
+
   return (
     <MapContainer
       center={[38.9072, -77.0369]}
