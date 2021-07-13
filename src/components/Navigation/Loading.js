@@ -1,7 +1,7 @@
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Image from 'react-bootstrap/Image';
-import catGif from '../assets/cat.gif';
+import catGif from '../../assets/cat.gif';
 
 const Loading = () => {
   return (

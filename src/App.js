@@ -1,10 +1,11 @@
 import { Switch, Route } from 'react-router-dom';
 import ObservationsState from './context/ObservationsContext';
-import NavigationBar from './components/NavigationBar';
-import ProtectedRoute from './components/ProtectedRoute';
-import SignIn from './components/SignIn';
-import Observations from './components/Observations';
-import Admin from './components/Admin';
+import ProtectedRoute from './components/Auth/ProtectedRoute';
+import SignIn from './components/Auth/SignIn';
+import Admin from './components/Auth/Admin';
+import NavigationBar from './components/Navigation/NavigationBar';
+import Observations from './components/Observations/Observations';
+import './assets/css/styles.css';
 
 const App = () => {
   return (

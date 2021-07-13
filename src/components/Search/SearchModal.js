@@ -4,7 +4,7 @@ import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
-import { ObservationContext } from '../context/ObservationsContext';
+import { ObservationContext } from '../../context/ObservationsContext';
 
 const SearchModal = () => {
   const { searchForm, setSearchForm, setQuery } = useContext(ObservationContext);

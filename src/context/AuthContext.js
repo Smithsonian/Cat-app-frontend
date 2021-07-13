@@ -18,20 +18,26 @@ const AuthState = ({ children }) => {
           token
         }
       };
-      const res = await fetch(
-        `${process.env.REACT_APP_OBSERVATION_API}/auth/verify-session`,
-        options
-      );
-      const { success, user, error } = await res.json();
-      if (success) {
-        setAuthToken(token);
-        setIsAuthenticated(true);
-        setUser(user);
-        setLoading(false);
-      } else if (error) {
+      try {
+        const res = await fetch(
+          `${process.env.REACT_APP_OBSERVATION_API}/auth/verify-session`,
+          options
+        );
+        const { success, user, error } = await res.json();
+        if (success) {
+          setAuthToken(token);
+          setIsAuthenticated(true);
+          setUser(user);
+          setLoading(false);
+        } else if (error) {
+          localStorage.removeItem('token');
+          setIsAuthenticated(false);
+          reportError(error);
+          setLoading(false);
+        }
+      } catch (error) {
         localStorage.removeItem('token');
-        setIsAuthenticated(false);
-        reportError(error);
+        reportError('Service is offline. Contact your admin');
         setLoading(false);
       }
     }
@@ -46,21 +52,26 @@ const AuthState = ({ children }) => {
       },
       body: JSON.stringify(credentials)
     };
-    const res = await fetch(`${process.env.REACT_APP_OBSERVATION_API}/auth/signin`, options);
-    const { token, error, details } = await res.json();
-    if (error) {
-      reportError(error);
-      setLoading(false);
-    }
-    if (details) {
-      reportError(details.message);
-      setLoading(false);
-    }
-    if (token) {
-      localStorage.setItem('token', token);
-      setToken(token);
-      setAuthToken(token);
-      setIsAuthenticated(true);
+    try {
+      const res = await fetch(`${process.env.REACT_APP_OBSERVATION_API}/auth/signin`, options);
+      const { token, error, details } = await res.json();
+      if (error) {
+        reportError(error);
+        setLoading(false);
+      }
+      if (details) {
+        reportError(details.message);
+        setLoading(false);
+      }
+      if (token) {
+        localStorage.setItem('token', token);
+        setToken(token);
+        setAuthToken(token);
+        setIsAuthenticated(true);
+        setLoading(false);
+      }
+    } catch (error) {
+      reportError('Service is offline. Contact your admin');
       setLoading(false);
     }
   };

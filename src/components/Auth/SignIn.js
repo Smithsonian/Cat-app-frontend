@@ -7,8 +7,8 @@ import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import Alert from 'react-bootstrap/Alert';
-import { AuthContext } from '../context/AuthContext';
-import Loading from '../components/Loading';
+import { AuthContext } from '../../context/AuthContext';
+import Loading from '../Navigation/Loading';
 
 const SignIn = () => {
   const { loading, isAuthenticated, signIn, error } = useContext(AuthContext);
