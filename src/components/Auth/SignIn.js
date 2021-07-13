@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { Redirect } from 'react-router-dom';
+import { Redirect, useLocation } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
@@ -11,6 +11,7 @@ import { AuthContext } from '../../context/AuthContext';
 import Loading from '../Navigation/Loading';
 
 const SignIn = () => {
+  const location = useLocation();
   const { loading, isAuthenticated, signIn, error } = useContext(AuthContext);
   const {
     register,
@@ -27,7 +28,15 @@ const SignIn = () => {
     signIn(data);
   };
 
-  if (isAuthenticated) return <Redirect to='/observations' />;
+  if (isAuthenticated)
+    return (
+      <Redirect
+        to={{
+          pathname: location.state ? location.state.next : '/observations',
+          from: location.pathname
+        }}
+      />
+    );
   return (
     <Container>
       <Row className='flex-column justify-content-center align-items-center vh-100'>

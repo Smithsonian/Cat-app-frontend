@@ -2,8 +2,9 @@ import Row from 'react-bootstrap/Row';
 import Card from 'react-bootstrap/Card';
 import Carousel from 'react-bootstrap/Carousel';
 import Button from 'react-bootstrap/Button';
+import { Link } from 'react-router-dom';
 
-const ObservationItem = ({ observation: { images } }) => {
+const ObservationItem = ({ observation: { _id, images } }) => {
   return (
     <Row className='justify-content-center'>
       <Card style={{ width: '18rem' }} className='mb-3'>
@@ -18,7 +19,7 @@ const ObservationItem = ({ observation: { images } }) => {
           ))}
         </Carousel>
         <Card.Body>
-          <Button variant='primary' block>
+          <Button as={Link} to={`/observation/${_id}`} variant='primary' block>
             Process observation
           </Button>
         </Card.Body>
