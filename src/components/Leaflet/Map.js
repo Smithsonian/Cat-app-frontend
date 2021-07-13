@@ -11,7 +11,7 @@ const Map = () => {
   return (
     <MapContainer
       center={[38.9072, -77.0369]}
-      zoom={13}
+      zoom={11}
       scrollWheelZoom={true}
       bounds={[
         [50.505, -29.09],

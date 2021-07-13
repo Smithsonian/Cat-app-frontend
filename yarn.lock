@@ -9202,6 +9202,11 @@ react-hook-form@^7.10.1:
   resolved "https://registry.yarnpkg.com/react-hook-form/-/react-hook-form-7.11.0.tgz#9cae5e21ba1c1a98a40c65cfee07db9e677edc21"
   integrity sha512-aJVvL5VV6JqUWvwx9fbrhc6La83aQAfXfqQr+TD/sWy3LPdqYBgBIHBt8WAKWzKRm3g29YV2CLfn4wkhNB9b+g==
 
+react-image-gallery@^1.2.4:
+  version "1.2.4"
+  resolved "https://registry.yarnpkg.com/react-image-gallery/-/react-image-gallery-1.2.4.tgz#bf12b7ff8b03a019ce8a9c6652a7f8e94480bb1c"
+  integrity sha512-M9iNjYHm1f8C55PQd3EBv5I6wF6FbjV9sIlMtjJwTVAR7ryJwd5/9m7b/k9/029uYNPIL4kF8shY7mn9IMUvHQ==
+
 react-is@^16.3.2, react-is@^16.6.0, react-is@^16.7.0, react-is@^16.8.1:
   version "16.13.1"
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.13.1.tgz#789729a4dc36de2999dc156dd6c1d9c18cea56a4"
