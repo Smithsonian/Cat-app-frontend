@@ -7,12 +7,18 @@
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
+    "axios": "^0.21.1",
+    "leaflet": "^1.7.1",
+    "npm-overlapping-marker-spiderfier": "^1.0.3",
     "react": "^17.0.2",
     "react-bootstrap": "^1.6.1",
     "react-dom": "^17.0.2",
     "react-hook-form": "^7.10.1",
+    "react-leaflet": "^3.2.0",
+    "react-leaflet-markercluster": "^3.0.0-rc1",
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.3",
+    "uuidv4": "^6.2.11",
     "web-vitals": "^1.0.1"
   },
   "scripts": {
@@ -27,16 +33,14 @@
       "react-app/jest"
     ]
   },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
-  }
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not op_mini all"
+  ],
+  "development": [
+    "last 1 chrome version",
+    "last 1 firefox version",
+    "last 1 safari version"
+  ]
 }

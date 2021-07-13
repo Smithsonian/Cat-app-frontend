@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { Redirect } from 'react-router-dom';
+import { Redirect, useLocation } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
@@ -7,10 +7,11 @@ import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import Alert from 'react-bootstrap/Alert';
-import { AuthContext } from '../context/AuthContext';
-import Loading from '../components/Loading';
+import { AuthContext } from '../../context/AuthContext';
+import Loading from '../Navigation/Loading';
 
 const SignIn = () => {
+  const location = useLocation();
   const { loading, isAuthenticated, signIn, error } = useContext(AuthContext);
   const {
     register,
@@ -27,7 +28,15 @@ const SignIn = () => {
     signIn(data);
   };
 
-  if (isAuthenticated) return <Redirect to='/secret' />;
+  if (isAuthenticated)
+    return (
+      <Redirect
+        to={{
+          pathname: location.state ? location.state.next : '/observations',
+          from: location.pathname
+        }}
+      />
+    );
   return (
     <Container>
       <Row className='flex-column justify-content-center align-items-center vh-100'>

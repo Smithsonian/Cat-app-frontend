@@ -3,11 +3,12 @@ import { Link } from 'react-router-dom';
 import Container from 'react-bootstrap/Container';
 import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
-import { AuthContext } from '../context/AuthContext';
+import { AuthContext } from '../../context/AuthContext';
 
 const NavigationBar = () => {
   const { signOut } = useContext(AuthContext);
   const [expanded, setExpanded] = useState(false);
+
   return (
     <Navbar
       bg='light'
@@ -16,7 +17,7 @@ const NavigationBar = () => {
       expanded={expanded}
       onSelect={() => setExpanded(false)}
     >
-      <Container>
+      <Container fluid>
         <Navbar.Brand as={Link} to='/'>
           Count cats 🐾
         </Navbar.Brand>
@@ -24,9 +25,9 @@ const NavigationBar = () => {
         <Navbar.Collapse id='navbarScroll'>
           <Nav className='ml-auto'>
             <Nav.Link as={Link} to='/'>
-              Home
+              Observations
             </Nav.Link>
-            <Nav.Link as={Link} to='/'>
+            <Nav.Link as={Link} to='/admin'>
               Admin
             </Nav.Link>
             <Nav.Link onClick={signOut}>Sign out</Nav.Link>
