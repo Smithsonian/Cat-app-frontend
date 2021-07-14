@@ -23,7 +23,7 @@ const NavigationBar = () => {
         </Navbar.Brand>
         <Navbar.Toggle aria-controls='navbarScroll' />
         <Navbar.Collapse id='navbarScroll'>
-          <Nav className='ml-auto'>
+          <Nav className='ms-auto'>
             <Nav.Link as={Link} to='/'>
               Observations
             </Nav.Link>

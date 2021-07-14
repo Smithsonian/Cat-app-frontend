@@ -1,27 +1,12 @@
 import { createContext, useState } from 'react';
 import useObservations from '../utils/useObservations';
+import { initialForm } from '../utils/searchFormHelpers';
 
 export const ObservationContext = createContext();
 
 const ObservationState = ({ children }) => {
-  const initialQuery = {
-    minLon: -76.97261,
-    maxLon: -77.09106,
-    minLat: 38.87531,
-    maxLat: 38.91299,
-    date_time_original: {
-      gte: Date.parse(
-        new Date().getFullYear() - 1,
-        new Date().getMonth() - 6,
-        new Date().getDate()
-      ),
-      lt: Date.now()
-    }
-  };
-  const [searchForm, setSearchForm] = useState(initialQuery);
-  const [queryMainMap, setQueryMainMap] = useState(initialQuery);
-  const [loadingMap, observationsNewMap, observationsReviewMap, errorMap] =
-    useObservations(queryMainMap);
+  const [queryMainMap, setQueryMainMap] = useState(initialForm);
+  const [loadingMap, observationsNewMap, observationsReviewMap] = useObservations(queryMainMap);
 
   /*  const getNewObservations = useCallback(async () => {
     if (axios.defaults.headers.common['token']) {
@@ -77,10 +62,7 @@ const ObservationState = ({ children }) => {
         loadingMap,
         observationsNewMap,
         observationsReviewMap,
-        errorMap,
-        setQueryMainMap,
-        searchForm,
-        setSearchForm
+        setQueryMainMap
       }}
     >
       {children}
