@@ -1,6 +1,7 @@
 @import url('https://unpkg.com/leaflet@1.7.1/dist/leaflet.css');
 @import '~react-leaflet-markercluster/dist/styles.min.css';
 @import '~react-image-gallery/styles/css/image-gallery.css';
+@import '//cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.css';
 
 .leaflet-container {
   min-height: calc(100vh - 80px);

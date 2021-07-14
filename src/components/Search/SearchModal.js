@@ -7,7 +7,7 @@ import Modal from 'react-bootstrap/Modal';
 import { ObservationContext } from '../../context/ObservationsContext';
 
 const SearchModal = () => {
-  const { searchForm, setSearchForm, setQuery } = useContext(ObservationContext);
+  const { searchForm, setSearchForm, setQueryMainMap } = useContext(ObservationContext);
   const [show, setShow] = useState(false);
   const { minLon, maxLon, minLat, maxLat } = searchForm;
 
@@ -19,7 +19,7 @@ const SearchModal = () => {
 
   const handleSubmit = event => {
     event.preventDefault();
-    setQuery(searchForm);
+    setQueryMainMap(searchForm);
     toggleShow();
   };
 

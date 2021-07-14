@@ -1,14 +1,20 @@
-import { createContext, useState } from 'react';
-import useObservations from '../utils/useObservations';
+import { createContext, useState, useEffect, useCallback } from 'react';
+import axios from 'axios';
+import { Redirect } from 'react-router-dom';
 
 export const ObservationContext = createContext();
 
 const ObservationState = ({ children }) => {
-  const initialQuery = {
-    minLon: -76.97261,
-    maxLon: -77.09106,
-    minLat: 38.87531,
-    maxLat: 38.91299,
+  const [loadingMap, setLoadingMap] = useState(false);
+  const [newObservations, setNewObservations] = useState([]);
+  const [observationsForReview, setObservationsForReview] = useState([]);
+  const [searchForm, setSearchForm] = useState({
+    minLon: -76.93198,
+    maxLon: -76.93199,
+    minLat: 38.90013,
+    maxLat: 38.90014
+  });
+  const [query, setQuery] = useState({
     date_time_original: {
       gte: Date.parse(
         new Date().getFullYear() - 1,
@@ -17,13 +23,33 @@ const ObservationState = ({ children }) => {
       ),
       lt: Date.now()
     }
-  };
-  const [searchForm, setSearchForm] = useState(initialQuery);
-  const [queryMainMap, setQueryMainMap] = useState(initialQuery);
-  const [loadingMap, observationsNewMap, observationsReviewMap, errorMap] =
-    useObservations(queryMainMap);
+  });
+  const [paginationNew, setPaginationNew] = useState({});
+  const [paginationReview, setPaginationReview] = useState({});
+  const [error, setError] = useState(null);
 
-  /*  const getNewObservations = useCallback(async () => {
+  const getObservations = useCallback(async () => {
+    setLoadingMap(true);
+    if (axios.defaults.headers.common['token']) {
+      try {
+        const {
+          data: { observations, error }
+        } = await axios.post(`${process.env.REACT_APP_OBSERVATION_API}/observations`, query);
+        if (error) {
+          reportError(error);
+          setLoadingMap(false);
+        }
+        setNewObservations(observations);
+        setLoadingMap(false);
+      } catch (error) {
+        reportError('Service is offline. Contact your admin');
+        setLoadingMap(false);
+        return <Redirect to='/' />;
+      }
+    }
+  }, [query]);
+
+  const getNewObservations = useCallback(async () => {
     if (axios.defaults.headers.common['token']) {
       try {
         const {
@@ -61,7 +87,16 @@ const ObservationState = ({ children }) => {
         reportError('Service is offline. Contact your admin');
       }
     }
-  }, [query]); */
+  }, [query]);
+
+  const reportError = error => {
+    setError(error);
+    setTimeout(() => setError(null), 3000);
+  };
+
+  useEffect(() => {
+    getObservations();
+  }, [getObservations]);
 
   /* useEffect(() => {
     getNewObservations();
@@ -75,12 +110,13 @@ const ObservationState = ({ children }) => {
     <ObservationContext.Provider
       value={{
         loadingMap,
-        observationsNewMap,
-        observationsReviewMap,
-        errorMap,
-        setQueryMainMap,
+        error,
+        newObservations,
+        observationsForReview,
         searchForm,
-        setSearchForm
+        setSearchForm,
+        setQuery,
+        paginationNew
       }}
     >
       {children}
