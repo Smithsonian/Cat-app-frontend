@@ -11,7 +11,7 @@ const Observations = () => {
   return (
     <Fragment>
       <Row>
-        <ToastContainer />
+        <ToastContainer position='top-center' autoClose={3000} />
         <SearchCanvas />
         <ObservationCanvas />
       </Row>

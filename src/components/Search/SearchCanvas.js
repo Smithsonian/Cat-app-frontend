@@ -99,7 +99,7 @@ const SearchCanvas = () => {
               <Col>
                 <Form.Group className='mb-3' controlId='status'>
                   <Form.Label>Status:</Form.Label>
-                  <Form.Select name='status' defaultValue={status} onChange={handleChange}>
+                  <Form.Select name='status' value={status} onChange={handleChange}>
                     {statusList.map(status => (
                       <option key={uuid_v4()} value={status}>
                         {status}
@@ -111,7 +111,7 @@ const SearchCanvas = () => {
               <Col>
                 <Form.Group className='mb-3' controlId='pattern'>
                   <Form.Label>Pattern:</Form.Label>
-                  <Form.Select name='pattern' defaultValue={pattern} onChange={handleChange}>
+                  <Form.Select name='pattern' value={pattern} onChange={handleChange}>
                     {patternList.map(status => (
                       <option key={uuid_v4()} value={status}>
                         {status}

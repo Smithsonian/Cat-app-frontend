@@ -6,8 +6,7 @@ import { AuthContext } from '../context/AuthContext';
 const useObservations = query => {
   const { signOut } = useContext(AuthContext);
   const [loading, setLoading] = useState(false);
-  const [observationsNew, setObservationsNew] = useState([]);
-  const [observationsReview, setObservationsReview] = useState([]);
+  const [observations, setObservations] = useState([]);
 
   const getObservations = useCallback(async () => {
     setLoading(true);
@@ -19,7 +18,7 @@ const useObservations = query => {
     if (axios.defaults.headers.common['token']) {
       try {
         const {
-          data: { observationsNew, observationsForReview, error }
+          data: { observations, error }
         } = await axios.post(
           `${process.env.REACT_APP_OBSERVATION_API}/observations`,
           sanitizedQuery
@@ -31,8 +30,14 @@ const useObservations = query => {
             signOut();
           }, 3000);
         }
-        setObservationsNew(observationsNew);
-        setObservationsReview(observationsForReview);
+        if (observations.length === 0) {
+          toast.info('No results, try again');
+          setObservations([]);
+          setLoading(false);
+          return;
+        }
+        toast.success(`${observations.length} observation(s) found`);
+        setObservations(observations);
         setLoading(false);
       } catch (error) {
         toast.error('Service is offline. Contact your admin');
@@ -42,13 +47,13 @@ const useObservations = query => {
         }, 3000);
       }
     }
-  }, [query]);
+  }, [query, signOut]);
 
   useEffect(() => {
     getObservations();
   }, [getObservations]);
 
-  return [loading, observationsNew, observationsReview];
+  return [loading, observations];
 };
 
 export default useObservations;

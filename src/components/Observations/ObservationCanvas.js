@@ -1,11 +1,15 @@
 import { useState, useContext, Fragment } from 'react';
 import Offcanvas from 'react-bootstrap/Offcanvas';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
+import ImageGallery from 'react-image-gallery';
 import { ObservationContext } from '../../context/ObservationsContext';
+import { renderLeftNav, renderRightNav } from '../../utils/imageGalleryHelpers';
 
 const ObservationCanvas = () => {
-  const {} = useContext(ObservationContext);
+  const { currentObservation } = useContext(ObservationContext);
   const [show, setShow] = useState(false);
 
   const toggleShow = () => setShow(prev => !prev);
@@ -31,7 +35,19 @@ const ObservationCanvas = () => {
         <Offcanvas.Header closeButton>
           <Offcanvas.Title>Process observations</Offcanvas.Title>
         </Offcanvas.Header>
-
+        <Row>
+          <Col>
+            <ImageGallery
+              renderLeftNav={renderLeftNav}
+              renderRightNav={renderRightNav}
+              thumbnailPosition='left'
+              items={currentObservation.images.map(image => ({
+                original: `${process.env.REACT_APP_IMAGE_BUCKET}/${image.image_id}_o.jpg`,
+                thumbnail: `${process.env.REACT_APP_IMAGE_BUCKET}/${image.image_id}_m.jpg`
+              }))}
+            />
+          </Col>
+        </Row>
         <Form>
           <Offcanvas.Body></Offcanvas.Body>
         </Form>

@@ -5,11 +5,17 @@ import MarkerClusterGroup from 'react-leaflet-markercluster';
 import { v4 as uuid_v4 } from 'uuid';
 import { ObservationContext } from '../../context/ObservationsContext';
 import ObservationItem from '../Observations/ObservationItem';
-import Loading from '../Navigation/Loading';
-import { theme, draw, getNewBoundsCreated, getNewBoundsEdit } from '../../utils/leafletConfig';
+import {
+  theme,
+  draw,
+  getNewBoundsCreated,
+  getNewBoundsEdit,
+  greenIcon,
+  redIcon
+} from '../../utils/leafletConfig';
 
 const Map = () => {
-  const { loadingMap, observationsNewMap, observationsReviewMap, setQueryMainMap } =
+  const { observationsMap, setQueryMainMap, setCurrentObservation } =
     useContext(ObservationContext);
   const onCreated = event => {
     const newBounds = getNewBoundsCreated(event);
@@ -37,33 +43,21 @@ const Map = () => {
       </FeatureGroup>
       <TileLayer {...theme} />
       <MarkerClusterGroup key={uuid_v4()}>
-        {observationsNewMap.map(observation => {
+        {observationsMap.map(observation => {
           const {
             _id,
+            forReview,
             location: {
               coordinates: [lng, lat]
             }
           } = observation;
           return (
-            <Marker key={_id} position={[lat, lng]}>
-              <Popup>
-                <ObservationItem observation={observation} />
-              </Popup>
-            </Marker>
-          );
-        })}
-      </MarkerClusterGroup>
-
-      <MarkerClusterGroup key={uuid_v4()}>
-        {observationsReviewMap.map(observation => {
-          const {
-            _id,
-            location: {
-              coordinates: [lng, lat]
-            }
-          } = observation;
-          return (
-            <Marker key={_id} position={[lat, lng]}>
+            <Marker
+              key={_id}
+              position={[lat, lng]}
+              icon={forReview ? greenIcon : redIcon}
+              onClick={() => setCurrentObservation(observation)}
+            >
               <Popup>
                 <ObservationItem observation={observation} />
               </Popup>
