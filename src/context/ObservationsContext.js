@@ -10,7 +10,7 @@ const ObservationState = ({ children }) => {
   const [showCanvas, setShowCanvas] = useState(false);
   const [currentObservation, setCurrentObservation] = useState();
   const [queryMainMap, setQueryMainMap] = useState(initialForm);
-  const [loadingMap, observationsMap, setObservationsMap] = useObservations(queryMainMap);
+  const [loadingMap, observationsMap, setObservationsMap] = useObservations(queryMainMap, true);
   const [queryCandidates, setQueryCandidates] = useState({});
   const [loadingCandidates, observationCandidates] = useObservations(queryCandidates);
 
@@ -33,6 +33,14 @@ const ObservationState = ({ children }) => {
     }
   };
 
+  const saveNewCat = async obsId => {
+    try {
+      toast.success('Saved as new cat');
+    } catch (error) {
+      toast.error(`Error: ${error.message}`);
+    }
+  };
+
   return (
     <ObservationContext.Provider
       value={{
@@ -43,7 +51,8 @@ const ObservationState = ({ children }) => {
         setCurrentObservation,
         showCanvas,
         setShowCanvas,
-        updateObservation
+        updateObservation,
+        saveNewCat
       }}
     >
       {children}

@@ -4,7 +4,7 @@ import axios from 'axios';
 import useDidUpdateEffect from '../utils/useDidUpdateEffect';
 import { AuthContext } from '../context/AuthContext';
 
-const useObservations = query => {
+const useObservations = (query, map) => {
   const { signOut } = useContext(AuthContext);
   const [loading, setLoading] = useState(false);
   const [observations, setObservations] = useState([]);
@@ -15,7 +15,6 @@ const useObservations = query => {
       (a, [k, v]) => (v ? ((a[k] = v), a) : a),
       {}
     );
-    console.log(sanitizedQuery);
     if (axios.defaults.headers.common['token']) {
       try {
         const {
@@ -37,6 +36,9 @@ const useObservations = query => {
           setLoading(false);
           return;
         }
+        if (map) {
+          toast.success(`${observations.length} observation(s) found`);
+        }
         setObservations(observations);
         setLoading(false);
       } catch (error) {
@@ -47,7 +49,7 @@ const useObservations = query => {
         }, 3000);
       }
     }
-  }, [query, signOut]);
+  }, [query, signOut, map]);
 
   useDidUpdateEffect(() => {
     getObservations();

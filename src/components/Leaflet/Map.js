@@ -1,7 +1,6 @@
-import { useEffect, useContext, memo } from 'react';
+import { useContext, memo } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, FeatureGroup } from 'react-leaflet';
 import { EditControl } from 'react-leaflet-draw';
-import { toast } from 'react-toastify';
 import MarkerClusterGroup from 'react-leaflet-markercluster';
 import { v4 as uuid_v4 } from 'uuid';
 import { ObservationContext } from '../../context/ObservationsContext';
@@ -27,10 +26,6 @@ const Map = () => {
     const newBounds = getNewBoundsEdit(event);
     setQueryMainMap(prev => ({ ...prev, ...newBounds }));
   };
-
-  useEffect(() => {
-    observationsMap.length > 0 && toast.success(`${observationsMap.length} observation(s) found`);
-  }, [observationsMap]);
 
   return (
     <MapContainer

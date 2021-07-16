@@ -12,7 +12,8 @@ import { renderLeftNav, renderRightNav } from '../../utils/imageGalleryHelpers';
 import MetadataForm from './MetadataForm';
 
 const ObservationCanvas = () => {
-  const { currentObservation, showCanvas, setShowCanvas } = useContext(ObservationContext);
+  const { currentObservation, showCanvas, setShowCanvas, saveNewCat } =
+    useContext(ObservationContext);
   const toggleShow = () => setShowCanvas(prev => !prev);
 
   return (
@@ -51,18 +52,21 @@ const ObservationCanvas = () => {
               </Row>
               <Row>
                 <Col lg={6}>
-                  <ImageGallery
-                    lazyLoad={true}
-                    showPlayButton={false}
-                    renderLeftNav={renderLeftNav}
-                    renderRightNav={renderRightNav}
-                    thumbnailPosition='left'
-                    items={currentObservation.images.map(image => ({
-                      fullscreen: `${process.env.REACT_APP_IMAGE_BUCKET}/${image.image_id}_o.jpg`,
-                      original: `${process.env.REACT_APP_IMAGE_BUCKET}/${image.image_id}_m.jpg`,
-                      thumbnail: `${process.env.REACT_APP_IMAGE_BUCKET}/${image.image_id}_m.jpg`
-                    }))}
-                  />
+                  <Row className='flex-column justify-content-between h-100'>
+                    <ImageGallery
+                      lazyLoad={true}
+                      showPlayButton={false}
+                      renderLeftNav={renderLeftNav}
+                      renderRightNav={renderRightNav}
+                      thumbnailPosition='left'
+                      items={currentObservation.images.map(image => ({
+                        fullscreen: `${process.env.REACT_APP_IMAGE_BUCKET}/${image.image_id}_o.jpg`,
+                        original: `${process.env.REACT_APP_IMAGE_BUCKET}/${image.image_id}_m.jpg`,
+                        thumbnail: `${process.env.REACT_APP_IMAGE_BUCKET}/${image.image_id}_m.jpg`
+                      }))}
+                    />
+                    <Button onClick={() => saveNewCat()}>Save as new cat</Button>
+                  </Row>
                 </Col>
                 <Col lg={6}>
                   <MetadataForm />

@@ -12,15 +12,18 @@ const MetadataForm = () => {
   const { currentObservation, updateObservation } = useContext(ObservationContext);
   const [metaDataForm, setMetaDataForm] = useState(currentObservation);
   const { status, pattern, primaryColor, secondaryColor } = metaDataForm;
+  const [edited, setEdited] = useState(false);
 
   const handleChange = event => {
     setMetaDataForm(prev => ({ ...prev, [event.target.name]: event.target.value }));
+    !edited && setEdited(true);
   };
 
   const handleSubmit = event => {
     event.preventDefault();
-    if (metaDataForm === currentObservation) return toast.info('Nothing to update');
+    if (!edited) return toast.info('Nothing to update');
     updateObservation(metaDataForm);
+    setEdited(false);
   };
 
   return (
