@@ -76,11 +76,11 @@ const AuthState = ({ children }) => {
     }
   };
 
-  const signOut = () => {
+  const signOut = useCallback(() => {
     localStorage.removeItem('token');
     setToken(null);
     setIsAuthenticated(false);
-  };
+  }, []);
 
   const reportError = error => {
     setError(error);

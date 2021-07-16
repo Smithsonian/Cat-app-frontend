@@ -1,6 +1,7 @@
-import { useState, useEffect, useCallback, useContext } from 'react';
+import { useState, useCallback, useContext } from 'react';
 import { toast } from 'react-toastify';
 import axios from 'axios';
+import useDidUpdateEffect from '../utils/useDidUpdateEffect';
 import { AuthContext } from '../context/AuthContext';
 
 const useObservations = query => {
@@ -36,7 +37,6 @@ const useObservations = query => {
           setLoading(false);
           return;
         }
-        toast.success(`${observations.length} observation(s) found`);
         setObservations(observations);
         setLoading(false);
       } catch (error) {
@@ -49,11 +49,11 @@ const useObservations = query => {
     }
   }, [query, signOut]);
 
-  useEffect(() => {
+  useDidUpdateEffect(() => {
     getObservations();
   }, [getObservations]);
 
-  return [loading, observations];
+  return [loading, observations, setObservations];
 };
 
 export default useObservations;

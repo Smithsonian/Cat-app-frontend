@@ -1,6 +1,7 @@
-import { useContext, memo } from 'react';
+import { useEffect, useContext, memo } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, FeatureGroup } from 'react-leaflet';
 import { EditControl } from 'react-leaflet-draw';
+import { toast } from 'react-toastify';
 import MarkerClusterGroup from 'react-leaflet-markercluster';
 import { v4 as uuid_v4 } from 'uuid';
 import { ObservationContext } from '../../context/ObservationsContext';
@@ -15,7 +16,7 @@ import {
 } from '../../utils/leafletConfig';
 
 const Map = () => {
-  const { observationsMap, setQueryMainMap, setCurrentObservation } =
+  const { observationsMap, setQueryMainMap, setCurrentObservation, setShowCanvas } =
     useContext(ObservationContext);
   const onCreated = event => {
     const newBounds = getNewBoundsCreated(event);
@@ -26,6 +27,10 @@ const Map = () => {
     const newBounds = getNewBoundsEdit(event);
     setQueryMainMap(prev => ({ ...prev, ...newBounds }));
   };
+
+  useEffect(() => {
+    observationsMap.length > 0 && toast.success(`${observationsMap.length} observation(s) found`);
+  }, [observationsMap]);
 
   return (
     <MapContainer
@@ -56,7 +61,12 @@ const Map = () => {
               key={_id}
               position={[lat, lng]}
               icon={forReview ? greenIcon : redIcon}
-              onClick={() => setCurrentObservation(observation)}
+              eventHandlers={{
+                click: () => {
+                  setCurrentObservation(observation);
+                  setShowCanvas(true);
+                }
+              }}
             >
               <Popup>
                 <ObservationItem observation={observation} />

@@ -112,9 +112,9 @@ const SearchCanvas = () => {
                 <Form.Group className='mb-3' controlId='pattern'>
                   <Form.Label>Pattern:</Form.Label>
                   <Form.Select name='pattern' value={pattern} onChange={handleChange}>
-                    {patternList.map(status => (
-                      <option key={uuid_v4()} value={status}>
-                        {status}
+                    {patternList.map(pattern => (
+                      <option key={uuid_v4()} value={pattern}>
+                        {pattern}
                       </option>
                     ))}
                   </Form.Select>
@@ -126,9 +126,9 @@ const SearchCanvas = () => {
                 <Form.Group className='mb-3' controlId='primaryColor'>
                   <Form.Label>Primary color:</Form.Label>
                   <Form.Select name='primaryColor' value={primaryColor} onChange={handleChange}>
-                    {colorList.map(status => (
-                      <option key={uuid_v4()} value={status}>
-                        {status}
+                    {colorList.map(color => (
+                      <option key={uuid_v4()} value={color}>
+                        {color}
                       </option>
                     ))}
                   </Form.Select>
@@ -138,9 +138,9 @@ const SearchCanvas = () => {
                 <Form.Group className='mb-3' controlId='secondaryColor'>
                   <Form.Label>Secondary color:</Form.Label>
                   <Form.Select name='secondaryColor' value={secondaryColor} onChange={handleChange}>
-                    {colorList.map(status => (
-                      <option key={uuid_v4()} value={status}>
-                        {status}
+                    {colorList.map(color => (
+                      <option key={uuid_v4()} value={color}>
+                        {color}
                       </option>
                     ))}
                   </Form.Select>
