@@ -11,7 +11,9 @@ const ObservationState = ({ children }) => {
   const [currentObservation, setCurrentObservation] = useState();
   const [queryMainMap, setQueryMainMap] = useState(initialForm);
   const [loadingMap, observationsMap, setObservationsMap] = useObservations(queryMainMap, true);
+  // eslint-disable-next-line
   const [queryCandidates, setQueryCandidates] = useState({});
+  // eslint-disable-next-line
   const [loadingCandidates, observationCandidates] = useObservations(queryCandidates);
 
   const updateObservation = async observation => {

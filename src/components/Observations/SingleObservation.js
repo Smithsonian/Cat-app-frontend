@@ -28,7 +28,7 @@ const SingleObservation = () => {
       setError('Service is offline. Contact your admin');
       setLoading(false);
     }
-  }, [id]);
+  }, [id, setCurrentObservation]);
 
   useEffect(() => {
     getSingle();
