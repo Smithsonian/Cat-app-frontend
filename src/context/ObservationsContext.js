@@ -19,14 +19,9 @@ const ObservationState = ({ children }) => {
     const fieldsToUpdate = { status, pattern, primaryColor, secondaryColor };
     try {
       const {
-        data: { error, updatedObservation }
-      } = await axios.patch(
-        `${process.env.REACT_APP_OBSERVATION_API}/observations/${_id}`,
-        fieldsToUpdate
-      );
-      if (error) return toast.error(`$Error: ${error}`);
-      setCurrentObservation(updatedObservation);
-      setObservationsMap(prev => prev.map(obs => (obs._id === _id ? updatedObservation : obs)));
+        data: { updatedObservation }
+      } = await axios.patch(`${process.env.REACT_APP_OBSERVATION_API}/observations/${_id}`, fieldsToUpdate);
+      updateObservation(_id, updatedObservation);
       toast.success('Updated');
     } catch (error) {
       toast.error(`Error: ${error.message}`);
@@ -35,10 +30,17 @@ const ObservationState = ({ children }) => {
 
   const saveNewCat = async obsId => {
     try {
-      toast.success('Saved as new cat');
+      const { data } = await axios.post(`${process.env.REACT_APP_OBSERVATION_API}/observations/${obsId}/newcat`);
+      updateObservations(obsId, data);
+      toast.success('Updated');
     } catch (error) {
       toast.error(`Error: ${error.message}`);
     }
+  };
+
+  const updateObservations = (id, observation) => {
+    setCurrentObservation(observation);
+    setObservationsMap(prev => prev.map(obs => (obs._id === id ? observation : obs)));
   };
 
   return (

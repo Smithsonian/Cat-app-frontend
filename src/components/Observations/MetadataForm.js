@@ -8,8 +8,8 @@ import { toast } from 'react-toastify';
 import { ObservationContext } from '../../context/ObservationsContext';
 import { statusList, patternList, colorList } from '../../utils/searchFormHelpers';
 
-const MetadataForm = () => {
-  const { currentObservation, updateObservation } = useContext(ObservationContext);
+const MetadataForm = ({ currentObservation }) => {
+  const { updateObservation } = useContext(ObservationContext);
   const [metaDataForm, setMetaDataForm] = useState(currentObservation);
   const { status, pattern, primaryColor, secondaryColor } = metaDataForm;
   const [edited, setEdited] = useState(false);
@@ -22,6 +22,7 @@ const MetadataForm = () => {
   const handleSubmit = event => {
     event.preventDefault();
     if (!edited) return toast.info('Nothing to update');
+    console.log(metaDataForm);
     updateObservation(metaDataForm);
     setEdited(false);
   };
