@@ -20,8 +20,11 @@ const ObservationState = ({ children }) => {
     try {
       const {
         data: { updatedObservation }
-      } = await axios.patch(`${process.env.REACT_APP_OBSERVATION_API}/observations/${_id}`, fieldsToUpdate);
-      updateObservation(_id, updatedObservation);
+      } = await axios.patch(
+        `${process.env.REACT_APP_OBSERVATION_API}/observations/${_id}`,
+        fieldsToUpdate
+      );
+      renderUpdatedObservation(_id, updatedObservation);
       toast.success('Updated');
     } catch (error) {
       toast.error(`Error: ${error.message}`);
@@ -30,15 +33,29 @@ const ObservationState = ({ children }) => {
 
   const saveNewCat = async obsId => {
     try {
-      const { data } = await axios.post(`${process.env.REACT_APP_OBSERVATION_API}/observations/${obsId}/newcat`);
-      updateObservations(obsId, data);
-      toast.success('Updated');
+      const { data } = await axios.post(
+        `${process.env.REACT_APP_OBSERVATION_API}/observations/${obsId}/newcat`
+      );
+      renderUpdatedObservation(obsId, data);
+      toast.success('Identification created');
     } catch (error) {
       toast.error(`Error: ${error.message}`);
     }
   };
 
-  const updateObservations = (id, observation) => {
+  const removeIdentification = async obsId => {
+    try {
+      const { data } = await axios.post(
+        `${process.env.REACT_APP_OBSERVATION_API}/observations/${obsId}/removeid`
+      );
+      renderUpdatedObservation(obsId, data);
+      toast.info('Identification removed');
+    } catch (error) {
+      toast.error(`Error: ${error.message}`);
+    }
+  };
+
+  const renderUpdatedObservation = (id, observation) => {
     setCurrentObservation(observation);
     setObservationsMap(prev => prev.map(obs => (obs._id === id ? observation : obs)));
   };
@@ -54,7 +71,8 @@ const ObservationState = ({ children }) => {
         showCanvas,
         setShowCanvas,
         updateObservation,
-        saveNewCat
+        saveNewCat,
+        removeIdentification
       }}
     >
       {children}

@@ -22,7 +22,6 @@ const MetadataForm = ({ currentObservation }) => {
   const handleSubmit = event => {
     event.preventDefault();
     if (!edited) return toast.info('Nothing to update');
-    console.log(metaDataForm);
     updateObservation(metaDataForm);
     setEdited(false);
   };

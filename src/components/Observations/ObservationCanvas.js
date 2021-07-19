@@ -1,4 +1,5 @@
 import { useContext, Fragment } from 'react';
+import { Link } from 'react-router-dom';
 import Offcanvas from 'react-bootstrap/Offcanvas';
 import Button from 'react-bootstrap/Button';
 import { ObservationContext } from '../../context/ObservationsContext';
@@ -25,11 +26,13 @@ const ObservationCanvas = () => {
       >
         🐈
       </Button>
-      <Offcanvas show={showCanvas} onHide={toggleShow} placement='end' style={{ width: '50%' }}>
+      <Offcanvas show={showCanvas} onHide={toggleShow} placement='end'>
         {currentObservation ? (
           <Fragment>
             <Offcanvas.Header closeButton>
-              <Offcanvas.Title>Observation: {currentObservation._id} </Offcanvas.Title>
+              <Offcanvas.Title as={Link} to={`/observation/${currentObservation._id}`}>
+                Observation: {currentObservation._id}
+              </Offcanvas.Title>
             </Offcanvas.Header>
             <Offcanvas.Body>
               <SingleObservationDetails currentObservation={currentObservation} />

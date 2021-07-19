@@ -8,22 +8,22 @@ import { ObservationContext } from '../../context/ObservationsContext';
 import { renderLeftNav, renderRightNav } from '../../utils/imageGalleryHelpers';
 import MetadataForm from './MetadataForm';
 
-const SingleObservationDetails = ({ currentObservation }) => {
-  const { saveNewCat } = useContext(ObservationContext);
+const SingleObservationDetails = ({ currentObservation, fullscreen }) => {
+  const { saveNewCat, removeIdentification } = useContext(ObservationContext);
   return (
     <Fragment>
-      <Row className='mb-3'>
-        <Col lg={6}>
-          {`Observed on: ${moment(currentObservation.date_time_original).format('MMMM Do YYYY, h:mm:ss a')}`}
+      <Row className={fullscreen ? 'mb-3 mt-5' : 'mb-3'}>
+        <Col>
+          {`Observed on: ${moment(currentObservation.date_time_original).format(
+            'MMMM Do YYYY, h:mm:ss a'
+          )}`}
         </Col>
-        <Col
-          lg={6}
-        >{`Latitude: ${currentObservation.location.coordinates[1]}, Longitude: ${currentObservation.location.coordinates[0]}`}</Col>
+        <Col>{`Latitude: ${currentObservation.location.coordinates[1]}, Longitude: ${currentObservation.location.coordinates[0]}`}</Col>
       </Row>
-      <Row>
-        <Col lg={6}>
+      <Row className='mb-3'>
+        <Col md={fullscreen ? 6 : 12} className='px-3'>
           <Row className='flex-column justify-content-between h-100'>
-            <Col>
+            <Col className='mb-3'>
               <ImageGallery
                 lazyLoad={true}
                 showPlayButton={false}
@@ -38,27 +38,29 @@ const SingleObservationDetails = ({ currentObservation }) => {
               />
             </Col>
             <Col>
-              <Row className='align-items-end justify-content-around h-100'>
+              <Row className='justify-content-around'>
                 {currentObservation.specimen ? (
                   <Fragment>
-                    <Col>
-                      <Button variant='danger'>Delete ID</Button>
-                      <Button>Specimen ID: {currentObservation.specimen}</Button>
-                    </Col>
+                    <Button>Specimen ID: {currentObservation.specimen}</Button>
+                    <Button
+                      onClick={() => removeIdentification(currentObservation._id)}
+                      variant='danger'
+                    >
+                      Delete ID
+                    </Button>
                   </Fragment>
                 ) : (
-                  <Button onClick={() => saveNewCat(currentObservation._id)}>Save as new cat</Button>
+                  <Button onClick={() => saveNewCat(currentObservation._id)}>
+                    Save as new cat
+                  </Button>
                 )}
               </Row>
             </Col>
           </Row>
         </Col>
-        <Col lg={6}>
+        <Col md={fullscreen ? 6 : 12} className='px-3'>
           <MetadataForm currentObservation={currentObservation} />
         </Col>
-      </Row>
-      <Row>
-        <Col></Col>
       </Row>
     </Fragment>
   );
