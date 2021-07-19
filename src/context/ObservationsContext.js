@@ -17,8 +17,8 @@ const ObservationState = ({ children }) => {
   const [loadingCandidates, observationCandidates] = useObservations(queryCandidates);
 
   const updateObservation = async observation => {
-    const { _id, status, pattern, primaryColor, secondaryColor } = observation;
-    const fieldsToUpdate = { status, pattern, primaryColor, secondaryColor };
+    const { _id, status, pattern, primaryColor, secondaryColor, captureSide } = observation;
+    const fieldsToUpdate = { status, pattern, primaryColor, secondaryColor, captureSide };
     try {
       const {
         data: { updatedObservation }

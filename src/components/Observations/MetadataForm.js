@@ -6,17 +6,31 @@ import Button from 'react-bootstrap/Button';
 import { v4 as uuid_v4 } from 'uuid';
 import { toast } from 'react-toastify';
 import { ObservationContext } from '../../context/ObservationsContext';
-import { statusList, patternList, colorList } from '../../utils/searchFormHelpers';
+import { statusList, patternList, colorList, captureSideList } from '../../utils/searchFormHelpers';
 
 const MetadataForm = ({ currentObservation }) => {
   const { updateObservation } = useContext(ObservationContext);
   const [metaDataForm, setMetaDataForm] = useState(currentObservation);
-  const { status, pattern, primaryColor, secondaryColor } = metaDataForm;
+  const { status, pattern, primaryColor, secondaryColor, captureSide } = metaDataForm;
   const [edited, setEdited] = useState(false);
 
   const handleChange = event => {
-    setMetaDataForm(prev => ({ ...prev, [event.target.name]: event.target.value }));
+    setMetaDataForm(prev => ({
+      ...prev,
+      [event.target.name]:
+        event.target.name !== 'captureSide'
+          ? event.target.value
+          : prev.captureSide.includes(event.target.value)
+          ? prev.captureSide.filter(e => e !== event.target.value)
+          : [...prev.captureSide, event.target.value]
+    }));
     !edited && setEdited(true);
+  };
+
+  const handleClick = event => {
+    metaDataForm.captureSide.length === 1 &&
+      metaDataForm.captureSide.includes(event.target.value) &&
+      setMetaDataForm(prev => ({ ...prev, captureSide: [] }));
   };
 
   const handleSubmit = event => {
@@ -29,7 +43,7 @@ const MetadataForm = ({ currentObservation }) => {
   return (
     <Form onSubmit={handleSubmit}>
       <Row className='align-items-center'>
-        <Col sm={3}>
+        <Col sm={4}>
           <Form.Group className='mb-3' controlId='status'>
             <Form.Label>Status</Form.Label>
             <Form.Select name='status' value={status} onChange={handleChange}>
@@ -51,7 +65,7 @@ const MetadataForm = ({ currentObservation }) => {
             </Form.Select>
           </Form.Group>
         </Col>
-        <Col sm={3}>
+        <Col sm={4}>
           <Form.Group className='mb-3' controlId='primaryColor'>
             <Form.Label>Primary color:</Form.Label>
             <Form.Select name='primaryColor' value={primaryColor} onChange={handleChange}>
@@ -68,6 +82,24 @@ const MetadataForm = ({ currentObservation }) => {
               {colorList.map(color => (
                 <option key={uuid_v4()} value={color}>
                   {color}
+                </option>
+              ))}
+            </Form.Select>
+          </Form.Group>
+        </Col>
+        <Col sm={4}>
+          <Form.Group className='mb-3' controlId='captureSide'>
+            <Form.Label>Captured side:</Form.Label>
+            <Form.Select
+              name='captureSide'
+              value={captureSide}
+              onChange={handleChange}
+              onClick={handleClick}
+              multiple
+            >
+              {captureSideList.map(side => (
+                <option key={uuid_v4()} value={side}>
+                  {side}
                 </option>
               ))}
             </Form.Select>

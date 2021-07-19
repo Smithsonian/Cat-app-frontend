@@ -42,3 +42,5 @@ export const patternList = [
 ];
 
 export const colorList = ['Unknown', 'Black', 'Brown', 'Buff/Tan', 'Gray', 'Orange', 'White'];
+
+export const captureSideList = ['Left', 'Right', 'Bottom', 'Top', 'Front', 'Rear'];
