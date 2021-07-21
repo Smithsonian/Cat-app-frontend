@@ -4,8 +4,6 @@ import axios from 'axios';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
-import { toast } from 'react-toastify';
-import { Link } from 'react-router-dom';
 import ImageGallery from 'react-image-gallery';
 import moment from 'moment';
 import { AuthContext } from '../../context/AuthContext';
