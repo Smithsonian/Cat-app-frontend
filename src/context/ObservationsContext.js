@@ -9,20 +9,16 @@ export const ObservationContext = createContext();
 
 const ObservationState = ({ children }) => {
   const { signOut } = useContext(AuthContext);
-  const [loading, setLoading] = useState(false);
   const [showCanvas, setShowCanvas] = useState(false);
   const [currentObservation, setCurrentObservation] = useState();
   const [deployments, setDeployments] = useState([]);
   const [searchForm, setSearchForm] = useState(initialForm);
   const [queryMainMap, setQueryMainMap] = useState(initialForm);
   const [loadingMap, observationsMap, setObservationsMap] = useObservations(queryMainMap, true);
-  // eslint-disable-next-line
   const [queryCandidates, setQueryCandidates] = useState({});
-  // eslint-disable-next-line
   const [loadingCandidates, observationCandidates] = useObservations(queryCandidates);
 
   const getDeployments = useCallback(async () => {
-    setLoading(true);
     if (axios.defaults.headers.common['token']) {
       try {
         const {
@@ -30,13 +26,10 @@ const ObservationState = ({ children }) => {
         } = await axios.get(`${process.env.REACT_APP_OBSERVATION_API}/observations/deployments`);
         if (error) {
           toast.error(error);
-          setLoading(false);
         }
         setDeployments(deployments);
-        setLoading(false);
       } catch (error) {
         toast.error('Service is offline. Contact your admin');
-        setLoading(false);
         setTimeout(() => {
           signOut();
         }, 3000);
@@ -97,13 +90,15 @@ const ObservationState = ({ children }) => {
   return (
     <ObservationContext.Provider
       value={{
-        loading,
         deployments,
+        setQueryMainMap,
         loadingMap,
         observationsMap,
         searchForm,
         setSearchForm,
-        setQueryMainMap,
+        setQueryCandidates,
+        loadingCandidates,
+        observationCandidates,
         currentObservation,
         setCurrentObservation,
         showCanvas,

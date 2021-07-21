@@ -79,6 +79,7 @@ const AuthState = ({ children }) => {
   const signOut = useCallback(() => {
     localStorage.removeItem('token');
     setToken(null);
+    setUser({});
     setIsAuthenticated(false);
   }, []);
 

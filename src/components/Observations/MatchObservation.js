@@ -1,24 +1,69 @@
-import { Fragment, useContext } from 'react';
+import { useState, useEffect, useCallback, useContext, Fragment } from 'react';
+import { useParams } from 'react-router-dom';
+import axios from 'axios';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
-import ImageGallery from 'react-image-gallery';
 import { toast } from 'react-toastify';
 import { Link } from 'react-router-dom';
+import ImageGallery from 'react-image-gallery';
 import moment from 'moment';
-import { ObservationContext } from '../../context/ObservationsContext';
 import { AuthContext } from '../../context/AuthContext';
-import StaticMap from '../Leaflet/StaticMap';
+import { ObservationContext } from '../../context/ObservationsContext';
+import Loading from '../Navigation/Loading';
 import { renderLeftNav, renderRightNav } from '../../utils/imageGalleryHelpers';
-import MetadataForm from './MetadataForm';
 
-const SingleObservationDetails = ({ currentObservation, fullscreen }) => {
-  const { saveNewCat, removeIdentification } = useContext(ObservationContext);
+const MatchObservation = () => {
   const {
     user: { role }
   } = useContext(AuthContext);
+  const {
+    currentObservation,
+    setCurrentObservation,
+    setQueryCandidates,
+    removeIdentification,
+    observationCandidates
+  } = useContext(ObservationContext);
+  const { id } = useParams();
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
 
-  return (
+  const getSingle = useCallback(async () => {
+    setLoading(true);
+    try {
+      const {
+        data: { observation, error }
+      } = await axios.get(`${process.env.REACT_APP_OBSERVATION_API}/observations/${id}`);
+      if (error) {
+        setError(error);
+        setLoading(false);
+      }
+      setCurrentObservation(observation);
+      setQueryCandidates({
+        status: observation.status,
+        pattern: observation.pattern,
+        primaryColor: observation.primaryColor,
+        secondaryColor: observation.secondaryColor,
+        specimen: { exists: true },
+        location: {
+          geoWithin: {
+            centerSphere: [observation.location.coordinates, 5 / 3959]
+          }
+        }
+      });
+      setLoading(false);
+    } catch (error) {
+      setError('Service is offline. Contact your admin');
+      setLoading(false);
+    }
+  }, [id, setCurrentObservation, setQueryCandidates]);
+
+  useEffect(() => {
+    getSingle();
+  }, [getSingle]);
+
+  if (error) return <div>{error.message}</div>;
+  return !loading && currentObservation ? (
     <Fragment>
       {role !== 'user' && currentObservation.forReview && (
         <Row className='justify-content-around'>
@@ -30,7 +75,7 @@ const SingleObservationDetails = ({ currentObservation, fullscreen }) => {
           </Col>
         </Row>
       )}
-      <Row className={fullscreen ? 'mb-3 mt-5' : 'mb-3'}>
+      <Row className='mb-3 mt-5'>
         <Col>
           <span className='fw-bold'>Observed on: </span>
           {moment(currentObservation.date_time_original).format('MMMM Do YYYY, h:mm:ss a')}
@@ -42,7 +87,7 @@ const SingleObservationDetails = ({ currentObservation, fullscreen }) => {
         </Col>
       </Row>
       <Row className='mb-3'>
-        <Col md={fullscreen ? 6 : 12} className={!fullscreen ? 'px3 mb-5' : 'px-3'}>
+        <Col md={6} className={'px3 mb-5'}>
           <Row className='flex-column justify-content-between h-100'>
             <Col className='mb-3'>
               <ImageGallery
@@ -53,14 +98,14 @@ const SingleObservationDetails = ({ currentObservation, fullscreen }) => {
                 thumbnailPosition='left'
                 items={currentObservation.images.map(image => ({
                   fullscreen: `${process.env.REACT_APP_IMAGE_BUCKET}/${image.image_id}_o.jpg`,
-                  original: `${process.env.REACT_APP_IMAGE_BUCKET}/${image.image_id}_m.jpg`,
+                  original: `${process.env.REACT_APP_IMAGE_BUCKET}/${image.image_id}_o.jpg`,
                   thumbnail: `${process.env.REACT_APP_IMAGE_BUCKET}/${image.image_id}_m.jpg`
                 }))}
               />
             </Col>
             <Col>
               <Row className='justify-content-around'>
-                {currentObservation.specimen ? (
+                {currentObservation.specimen && (
                   <Fragment>
                     <Button className='mb-3'>Specimen ID: {currentObservation.specimen}</Button>
                     <Button
@@ -70,38 +115,20 @@ const SingleObservationDetails = ({ currentObservation, fullscreen }) => {
                       Delete ID
                     </Button>
                   </Fragment>
-                ) : (
-                  <Fragment>
-                    <Button
-                      className='mb-3'
-                      onClick={() =>
-                        currentObservation.captureSide.length !== 0
-                          ? saveNewCat(currentObservation._id)
-                          : toast.warning(
-                              'Please edit the captured side before creating a new identification'
-                            )
-                      }
-                    >
-                      Save as new cat
-                    </Button>
-                    <Button as={Link} to={`/match/${currentObservation._id}`} variant='info'>
-                      Match to specimen
-                    </Button>
-                  </Fragment>
                 )}
               </Row>
             </Col>
           </Row>
         </Col>
-        <Col md={fullscreen ? 6 : 12} className='px-3'>
-          <Row className='flex-column justify-content-between h-100'>
-            <MetadataForm currentObservation={currentObservation} />
-            {fullscreen && <StaticMap currentObservation={currentObservation} />}
-          </Row>
+        <Col md={6} className='px-3'>
+          <Row className='flex-column justify-content-between h-100'></Row>
         </Col>
       </Row>
     </Fragment>
+  ) : (
+    <Row className='justify-content-center align-items-center'>
+      <Loading />
+    </Row>
   );
 };
-
-export default SingleObservationDetails;
+export default MatchObservation;
