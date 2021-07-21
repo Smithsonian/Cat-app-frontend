@@ -6,12 +6,11 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import { v4 as uuid_v4 } from 'uuid';
 import { ObservationContext } from '../../context/ObservationsContext';
-import { initialForm, statusList, patternList, colorList } from '../../utils/searchFormHelpers';
+import { statusList, patternList, colorList } from '../../utils/searchFormHelpers';
 
 const SearchCanvas = () => {
-  const { setQueryMainMap } = useContext(ObservationContext);
+  const { setQueryMainMap, searchForm, setSearchForm } = useContext(ObservationContext);
   const [show, setShow] = useState(false);
-  const [searchForm, setSearchForm] = useState(initialForm);
   const {
     minLon,
     maxLon,

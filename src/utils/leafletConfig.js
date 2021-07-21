@@ -35,6 +35,12 @@ export const redIcon = new L.Icon({
   shadowSize: [41, 41]
 });
 
+export const cameraIcon = new L.divIcon({
+  html: '📷',
+  iconSize: [20, 20],
+  className: 'cameraMarker'
+});
+
 export const getNewBoundsCreated = ({
   layer: {
     _bounds: {

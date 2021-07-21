@@ -16,6 +16,7 @@ const SingleObservationDetails = ({ currentObservation, fullscreen }) => {
   const {
     user: { role }
   } = useContext(AuthContext);
+
   return (
     <Fragment>
       {role !== 'user' && currentObservation.forReview && (

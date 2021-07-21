@@ -4,21 +4,29 @@ import { EditControl } from 'react-leaflet-draw';
 import MarkerClusterGroup from 'react-leaflet-markercluster';
 import { v4 as uuid_v4 } from 'uuid';
 import { ObservationContext } from '../../context/ObservationsContext';
-import ObservationItem from '../Observations/ObservationItem';
 import {
   theme,
   draw,
   getNewBoundsCreated,
   getNewBoundsEdit,
   greenIcon,
-  redIcon
+  redIcon,
+  cameraIcon
 } from '../../utils/leafletConfig';
 
 const Map = () => {
-  const { observationsMap, setQueryMainMap, setCurrentObservation, setShowCanvas } =
-    useContext(ObservationContext);
+  const {
+    observationsMap,
+    setQueryMainMap,
+    deployments,
+    setCurrentObservation,
+    setShowCanvas,
+    setSearchForm
+  } = useContext(ObservationContext);
+
   const onCreated = event => {
     const newBounds = getNewBoundsCreated(event);
+    setSearchForm(prev => ({ ...prev, ...newBounds }));
     setQueryMainMap(prev => ({ ...prev, ...newBounds }));
   };
 
@@ -42,7 +50,19 @@ const Map = () => {
         <EditControl draw={draw} onCreated={onCreated} onEdited={onEdited} />
       </FeatureGroup>
       <TileLayer {...theme} />
-      <MarkerClusterGroup key={uuid_v4()}>
+      {deployments.map(
+        ({
+          deployment_id,
+          location: {
+            coordinates: [lng, lat]
+          }
+        }) => (
+          <Marker key={deployment_id} position={[lat, lng]} icon={cameraIcon} zIndexOffset={-1000}>
+            <Popup>Deployment: {deployment_id}</Popup>
+          </Marker>
+        )
+      )}
+      <MarkerClusterGroup key={uuid_v4()} zIndexOffset={1000}>
         {observationsMap.map(observation => {
           const {
             _id,
@@ -56,17 +76,14 @@ const Map = () => {
               key={_id}
               position={[lat, lng]}
               icon={forReview ? greenIcon : redIcon}
+              zIndexOffset={1000}
               eventHandlers={{
                 click: () => {
                   setCurrentObservation(observation);
                   setShowCanvas(true);
                 }
               }}
-            >
-              <Popup>
-                <ObservationItem observation={observation} />
-              </Popup>
-            </Marker>
+            ></Marker>
           );
         })}
       </MarkerClusterGroup>
