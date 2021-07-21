@@ -119,7 +119,13 @@ const MatchObservation = () => {
           </Row>
         </Col>
         <Col md={6} className='px-3'>
-          <Row className='flex-column justify-content-between h-100'></Row>
+          <Row className='flex-column justify-content-between h-100'>
+            <Col>
+              {observationCandidates.map(candidate => (
+                <div>{candidate._id}</div>
+              ))}
+            </Col>
+          </Row>
         </Col>
       </Row>
     </Fragment>
