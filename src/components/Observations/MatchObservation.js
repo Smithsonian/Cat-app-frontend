@@ -8,6 +8,7 @@ import ImageGallery from 'react-image-gallery';
 import moment from 'moment';
 import { AuthContext } from '../../context/AuthContext';
 import { ObservationContext } from '../../context/ObservationsContext';
+import FilterCanvas from './FilterCanvas';
 import Loading from '../Navigation/Loading';
 import { renderLeftNav, renderRightNav } from '../../utils/imageGalleryHelpers';
 
@@ -63,6 +64,9 @@ const MatchObservation = () => {
   if (error) return <div>{error.message}</div>;
   return !loading && currentObservation ? (
     <Fragment>
+      <Row>
+        <FilterCanvas currentObservation={currentObservation} />
+      </Row>
       {role !== 'user' && currentObservation.forReview && (
         <Row className='justify-content-around'>
           <Col sm={1}>
@@ -84,7 +88,7 @@ const MatchObservation = () => {
           <span className='fw-bold'>Longitude:</span> {currentObservation.location.coordinates[0]}
         </Col>
       </Row>
-      <Row className='mb-3'>
+      <Row className='mb-3 h-50'>
         <Col md={6} className={'px3 mb-5'}>
           <Row className='flex-column justify-content-between h-100'>
             <Col className='mb-3'>
@@ -118,14 +122,23 @@ const MatchObservation = () => {
             </Col>
           </Row>
         </Col>
-        <Col md={6} className='px-3'>
-          <Row className='flex-column justify-content-between h-100'>
-            <Col>
-              {observationCandidates.map(candidate => (
-                <div>{candidate._id}</div>
-              ))}
-            </Col>
-          </Row>
+        <Col md={6} className='px-3' style={{ overflowY: 'scroll', height: '600px' }}>
+          {observationCandidates.map(candidate => (
+            <Row className='flex-column justify-content-between mb-3'>
+              <ImageGallery
+                lazyLoad={true}
+                showPlayButton={false}
+                renderLeftNav={renderLeftNav}
+                renderRightNav={renderRightNav}
+                thumbnailPosition='left'
+                items={candidate.images.map(image => ({
+                  fullscreen: `${process.env.REACT_APP_IMAGE_BUCKET}/${image.image_id}_o.jpg`,
+                  original: `${process.env.REACT_APP_IMAGE_BUCKET}/${image.image_id}_o.jpg`,
+                  thumbnail: `${process.env.REACT_APP_IMAGE_BUCKET}/${image.image_id}_m.jpg`
+                }))}
+              />
+            </Row>
+          ))}
         </Col>
       </Row>
     </Fragment>
