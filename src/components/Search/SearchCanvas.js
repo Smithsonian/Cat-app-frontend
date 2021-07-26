@@ -9,7 +9,8 @@ import { ObservationContext } from '../../context/ObservationsContext';
 import { statusList, patternList, colorList } from '../../utils/searchFormHelpers';
 
 const SearchCanvas = () => {
-  const { setQueryMainMap, searchForm, setSearchForm } = useContext(ObservationContext);
+  const { setQueryMainMap, searchForm, setSearchForm, setObservationsMap } =
+    useContext(ObservationContext);
   const [show, setShow] = useState(false);
   const {
     minLon,
@@ -221,6 +222,11 @@ const SearchCanvas = () => {
             <Row className='mt-5'>
               <Button variant='warning' type='submit'>
                 Search
+              </Button>
+            </Row>
+            <Row className='mt-3'>
+              <Button variant='info' onClick={() => setObservationsMap([])}>
+                Clear map
               </Button>
             </Row>
           </Offcanvas.Body>

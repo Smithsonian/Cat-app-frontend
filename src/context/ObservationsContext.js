@@ -111,6 +111,7 @@ const ObservationState = ({ children }) => {
         setQueryMainMap,
         loadingMap,
         observationsMap,
+        setObservationsMap,
         searchForm,
         setSearchForm,
         setQueryCandidates,

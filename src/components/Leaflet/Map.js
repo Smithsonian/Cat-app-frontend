@@ -1,6 +1,8 @@
 import { useContext, memo } from 'react';
+import { Button } from 'react-bootstrap';
 import { MapContainer, TileLayer, Marker, Popup, FeatureGroup } from 'react-leaflet';
 import { EditControl } from 'react-leaflet-draw';
+import { Link } from 'react-router-dom';
 import MarkerClusterGroup from 'react-leaflet-markercluster';
 import { v4 as uuid_v4 } from 'uuid';
 import { ObservationContext } from '../../context/ObservationsContext';
@@ -17,6 +19,7 @@ import {
 const Map = () => {
   const {
     observationsMap,
+    setObservationsMap,
     setQueryMainMap,
     deployments,
     setCurrentObservation,
@@ -47,7 +50,12 @@ const Map = () => {
       className='leaflet-container'
     >
       <FeatureGroup>
-        <EditControl draw={draw} onCreated={onCreated} onEdited={onEdited} />
+        <EditControl
+          draw={draw}
+          onCreated={onCreated}
+          onEdited={onEdited}
+          onDeleted={() => setObservationsMap([])}
+        />
       </FeatureGroup>
       <TileLayer {...theme} />
       {deployments.map(
@@ -58,7 +66,16 @@ const Map = () => {
           }
         }) => (
           <Marker key={deployment_id} position={[lat, lng]} icon={cameraIcon} zIndexOffset={-1000}>
-            <Popup>Deployment: {deployment_id}</Popup>
+            <Popup>
+              <Button
+                as={Link}
+                to={`/deployment/${deployment_id}`}
+                style={{ color: '#fff !important' }}
+                className='text-decoration-none'
+              >
+                Deployment: {deployment_id}
+              </Button>
+            </Popup>
           </Marker>
         )
       )}

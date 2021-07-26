@@ -1,5 +1,5 @@
 import { useState, useContext, Fragment } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import Container from 'react-bootstrap/Container';
 import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
@@ -29,14 +29,19 @@ const NavigationBar = () => {
             <Navbar.Toggle aria-controls='navbarScroll' />
             <Navbar.Collapse id='navbarScroll'>
               <Nav className='ms-auto align-items-center'>
-                <Nav.Item>Welcome back, {name}</Nav.Item>
-                <Nav.Link as={Link} to='/'>
+                <Nav.Item className='text-muted'>Welcome back, {name}</Nav.Item>
+                <Nav.Link as={NavLink} to='/' exact>
                   Observations
                 </Nav.Link>
                 {role !== 'user' && (
-                  <Nav.Link as={Link} to='/admin'>
-                    Admin
-                  </Nav.Link>
+                  <Fragment>
+                    <Nav.Link as={NavLink} to='/review' exact>
+                      Review observations
+                    </Nav.Link>
+                    <Nav.Link as={NavLink} to='/admin' exact>
+                      Admin
+                    </Nav.Link>
+                  </Fragment>
                 )}
                 <Nav.Link onClick={signOut}>Sign out</Nav.Link>
               </Nav>
