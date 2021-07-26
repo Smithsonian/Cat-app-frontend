@@ -1,5 +1,12 @@
+import Row from 'react-bootstrap/Row';
+import NewUserCanvas from './NewUserCanvas';
+
 const Admin = () => {
-  return <div>ADMIN</div>;
+  return (
+    <Row>
+      <NewUserCanvas />
+    </Row>
+  );
 };
 
 export default Admin;

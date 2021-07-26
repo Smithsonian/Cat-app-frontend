@@ -1,4 +1,5 @@
 import { createContext, useState, useEffect, useCallback } from 'react';
+import { toast } from 'react-toastify';
 import setAuthToken from '../utils/setAuthToken';
 
 export const AuthContext = createContext();
@@ -8,6 +9,7 @@ const AuthState = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [token, setToken] = useState(localStorage.getItem('token') || null);
   const [user, setUser] = useState({});
+  const [users, setUsers] = useState([]);
   const [error, setError] = useState(null);
 
   const verifySession = useCallback(async () => {
@@ -42,6 +44,39 @@ const AuthState = ({ children }) => {
       }
     }
   }, [token]);
+
+  const createUser = async user => {
+    setLoading(true);
+    const options = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        token
+      },
+      body: JSON.stringify(user)
+    };
+    try {
+      const res = await fetch(`${process.env.REACT_APP_OBSERVATION_API}/auth/create-user`, options);
+      const { user, error, details } = await res.json();
+      if (error) {
+        toast.error(error);
+        setLoading(false);
+      }
+      if (details) {
+        toast.error(details.message);
+        setLoading(false);
+      }
+      if (user) {
+        toast.success('User created. An email has been sent');
+        setUsers(prev => [user, prev]);
+        setLoading(false);
+      }
+    } catch (error) {
+      toast.error('Service is offline. Contact your admin');
+      setLoading(false);
+      setTimeout(() => signOut(), 3000);
+    }
+  };
 
   const signIn = async credentials => {
     setLoading(true);
@@ -80,6 +115,7 @@ const AuthState = ({ children }) => {
     localStorage.removeItem('token');
     setToken(null);
     setUser({});
+    setUsers([]);
     setIsAuthenticated(false);
   }, []);
 
@@ -93,7 +129,9 @@ const AuthState = ({ children }) => {
   }, [verifySession]);
 
   return (
-    <AuthContext.Provider value={{ loading, isAuthenticated, token, user, error, signIn, signOut }}>
+    <AuthContext.Provider
+      value={{ loading, isAuthenticated, token, user, users, error, createUser, signIn, signOut }}
+    >
       {children}
     </AuthContext.Provider>
   );

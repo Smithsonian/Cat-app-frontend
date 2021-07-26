@@ -52,15 +52,25 @@ const ObservationsForReview = () => {
   const columns = [
     {
       name: 'ID',
-      selector: row => <Link to={`/observation/${row._id}`}>{row._id}</Link>,
+      selector: ({ _id }) => <Link to={`/observation/${_id}`}>{_id}</Link>,
       sortable: true
     },
-    { name: 'Deployment ID', selector: row => row.deployment_id },
+    {
+      name: 'Deployment ID',
+      selector: ({ deployment_id }) => (
+        <Link to={`/deployment/${deployment_id}`}>{deployment_id}</Link>
+      )
+    },
     {
       name: 'Date',
-      selector: row => moment(row.date_time_original).format('MM/DD/YYYY')
+      selector: ({ date_time_original }) => moment(date_time_original).format('MM/DD/YYYY')
     },
-    { name: 'Reason for review', selector: row => row.reasonReview }
+    { name: 'Reason for review', selector: ({ reasonReview }) => reasonReview },
+    {
+      name: 'Status, Pattern, Primary color, Secondary color',
+      selector: ({ status, pattern, primaryColor, secondaryColor }) =>
+        `${status}, ${pattern}, ${primaryColor}, ${secondaryColor}`
+    }
   ];
 
   return loading ? (
