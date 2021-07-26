@@ -37,9 +37,26 @@ const ObservationState = ({ children }) => {
     }
   }, [signOut]);
 
-  const updateObservation = async observation => {
+  const updateObservationMeta = async observation => {
     const { _id, status, pattern, primaryColor, secondaryColor, captureSide } = observation;
     const fieldsToUpdate = { status, pattern, primaryColor, secondaryColor, captureSide };
+    try {
+      const {
+        data: { updatedObservation }
+      } = await axios.patch(
+        `${process.env.REACT_APP_OBSERVATION_API}/observations/${_id}`,
+        fieldsToUpdate
+      );
+      renderUpdatedObservation(_id, updatedObservation);
+      toast.success('Updated');
+    } catch (error) {
+      toast.error(`Error: ${error.message}`);
+    }
+  };
+
+  const updateObservationNotCat = async observation => {
+    const { _id } = observation;
+    const fieldsToUpdate = { isCat: false, forReview: true, reasonReview: 'No cat' };
     try {
       const {
         data: { updatedObservation }
@@ -103,7 +120,8 @@ const ObservationState = ({ children }) => {
         setCurrentObservation,
         showCanvas,
         setShowCanvas,
-        updateObservation,
+        updateObservationMeta,
+        updateObservationNotCat,
         saveNewCat,
         removeIdentification
       }}

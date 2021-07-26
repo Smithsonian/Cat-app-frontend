@@ -21,14 +21,23 @@ const SingleObservationDetails = ({ currentObservation, fullscreen }) => {
   return (
     <Fragment>
       {role !== 'user' && currentObservation.forReview && (
-        <Row className='justify-content-around'>
-          <Col sm={1}>
-            <Button variant='success'>Approve</Button>
-          </Col>
-          <Col sm={1}>
-            <Button variant='danger'>Reject</Button>
-          </Col>
-        </Row>
+        <Col>
+          <Row className='justify-content-center'>
+            Reason for approval: {currentObservation.reasonReview}
+          </Row>
+          <Row className='justify-content-center'>
+            <Col md={fullscreen & 1}>
+              <Row>
+                <Button variant='success'>Approve</Button>
+              </Row>
+            </Col>
+            <Col md={fullscreen & 1}>
+              <Row>
+                <Button variant='danger'>Reject</Button>
+              </Row>
+            </Col>
+          </Row>
+        </Col>
       )}
       <Row className={fullscreen ? 'mb-3 mt-5' : 'mb-3'}>
         <Col>
@@ -59,37 +68,39 @@ const SingleObservationDetails = ({ currentObservation, fullscreen }) => {
               />
             </Col>
             <Col>
-              <Row className='justify-content-around'>
-                {currentObservation.specimen ? (
-                  <Fragment>
-                    <Button className='mb-3'>Specimen ID: {currentObservation.specimen}</Button>
-                    <Button
-                      onClick={() => removeIdentification(currentObservation._id)}
-                      variant='danger'
-                    >
-                      Delete ID
-                    </Button>
-                  </Fragment>
-                ) : (
-                  <Fragment>
-                    <Button
-                      className='mb-3'
-                      onClick={() =>
-                        currentObservation.captureSide.length !== 0
-                          ? saveNewCat(currentObservation._id)
-                          : toast.warning(
-                              'Please edit the captured side before creating a new identification'
-                            )
-                      }
-                    >
-                      Save as new cat
-                    </Button>
-                    <Button as={Link} to={`/match/${currentObservation._id}`} variant='info'>
-                      Match to specimen
-                    </Button>
-                  </Fragment>
-                )}
-              </Row>
+              {currentObservation.isCat && (
+                <Row className='justify-content-around'>
+                  {currentObservation.specimen ? (
+                    <Fragment>
+                      <Button className='mb-3'>Specimen ID: {currentObservation.specimen}</Button>
+                      <Button
+                        onClick={() => removeIdentification(currentObservation._id)}
+                        variant='danger'
+                      >
+                        Delete ID
+                      </Button>
+                    </Fragment>
+                  ) : (
+                    <Fragment>
+                      <Button
+                        className='mb-3'
+                        onClick={() =>
+                          currentObservation.captureSide.length !== 0
+                            ? saveNewCat(currentObservation._id)
+                            : toast.warning(
+                                'Please edit the captured side before creating a new identification'
+                              )
+                        }
+                      >
+                        Save as new cat
+                      </Button>
+                      <Button as={Link} to={`/match/${currentObservation._id}`} variant='info'>
+                        Match to specimen
+                      </Button>
+                    </Fragment>
+                  )}
+                </Row>
+              )}
             </Col>
           </Row>
         </Col>

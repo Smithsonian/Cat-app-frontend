@@ -1,4 +1,4 @@
-import { useState, useContext } from 'react';
+import { useState, useContext, Fragment } from 'react';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
@@ -9,7 +9,7 @@ import { ObservationContext } from '../../context/ObservationsContext';
 import { statusList, patternList, colorList, captureSideList } from '../../utils/searchFormHelpers';
 
 const MetadataForm = ({ currentObservation }) => {
-  const { updateObservation } = useContext(ObservationContext);
+  const { updateObservationMeta, updateObservationNotCat } = useContext(ObservationContext);
   const [metaDataForm, setMetaDataForm] = useState(currentObservation);
   const { status, pattern, primaryColor, secondaryColor, captureSide } = metaDataForm;
   const [edited, setEdited] = useState(false);
@@ -36,82 +36,93 @@ const MetadataForm = ({ currentObservation }) => {
   const handleSubmit = event => {
     event.preventDefault();
     if (!edited) return toast.info('Nothing to update');
-    updateObservation(metaDataForm);
+    updateObservationMeta(metaDataForm);
     setEdited(false);
   };
 
   return (
-    <Form onSubmit={handleSubmit}>
-      <Row className='align-items-center'>
-        <Col sm={4}>
-          <Form.Group className='mb-3' controlId='status'>
-            <Form.Label>Status</Form.Label>
-            <Form.Select name='status' value={status} onChange={handleChange}>
-              {statusList.map(status => (
-                <option key={uuid_v4()} value={status}>
-                  {status}
-                </option>
-              ))}
-            </Form.Select>
-          </Form.Group>
-          <Form.Group className='mb-3' controlId='pattern'>
-            <Form.Label>Pattern</Form.Label>
-            <Form.Select name='pattern' value={pattern} onChange={handleChange}>
-              {patternList.map(pattern => (
-                <option key={uuid_v4()} value={pattern}>
-                  {pattern}
-                </option>
-              ))}
-            </Form.Select>
-          </Form.Group>
-        </Col>
-        <Col sm={4}>
-          <Form.Group className='mb-3' controlId='primaryColor'>
-            <Form.Label>Primary color:</Form.Label>
-            <Form.Select name='primaryColor' value={primaryColor} onChange={handleChange}>
-              {colorList.map(color => (
-                <option key={uuid_v4()} value={color}>
-                  {color}
-                </option>
-              ))}
-            </Form.Select>
-          </Form.Group>
-          <Form.Group className='mb-3' controlId='secondaryColor'>
-            <Form.Label>Secondary color:</Form.Label>
-            <Form.Select name='secondaryColor' value={secondaryColor} onChange={handleChange}>
-              {colorList.map(color => (
-                <option key={uuid_v4()} value={color}>
-                  {color}
-                </option>
-              ))}
-            </Form.Select>
-          </Form.Group>
-        </Col>
-        <Col sm={4}>
-          <Form.Group className='mb-3' controlId='captureSide'>
-            <Form.Label>Captured side:</Form.Label>
-            <Form.Select
-              name='captureSide'
-              value={captureSide}
-              onChange={handleChange}
-              onClick={handleClick}
-              multiple
-            >
-              {captureSideList.map(side => (
-                <option key={uuid_v4()} value={side}>
-                  {side}
-                </option>
-              ))}
-            </Form.Select>
-          </Form.Group>
-        </Col>
-      </Row>
-      <Row className='mt-5'>
-        <Button variant='success' type='submit'>
-          Save
+    <Fragment>
+      <Form onSubmit={handleSubmit} className='mb-3'>
+        <Row className='align-items-center'>
+          <Col sm={4}>
+            <Form.Group className='mb-3' controlId='status'>
+              <Form.Label>Status</Form.Label>
+              <Form.Select name='status' value={status} onChange={handleChange}>
+                {statusList.map(status => (
+                  <option key={uuid_v4()} value={status}>
+                    {status}
+                  </option>
+                ))}
+              </Form.Select>
+            </Form.Group>
+            <Form.Group className='mb-3' controlId='pattern'>
+              <Form.Label>Pattern</Form.Label>
+              <Form.Select name='pattern' value={pattern} onChange={handleChange}>
+                {patternList.map(pattern => (
+                  <option key={uuid_v4()} value={pattern}>
+                    {pattern}
+                  </option>
+                ))}
+              </Form.Select>
+            </Form.Group>
+          </Col>
+          <Col sm={4}>
+            <Form.Group className='mb-3' controlId='primaryColor'>
+              <Form.Label>Primary color:</Form.Label>
+              <Form.Select name='primaryColor' value={primaryColor} onChange={handleChange}>
+                {colorList.map(color => (
+                  <option key={uuid_v4()} value={color}>
+                    {color}
+                  </option>
+                ))}
+              </Form.Select>
+            </Form.Group>
+            <Form.Group className='mb-3' controlId='secondaryColor'>
+              <Form.Label>Secondary color:</Form.Label>
+              <Form.Select name='secondaryColor' value={secondaryColor} onChange={handleChange}>
+                {colorList.map(color => (
+                  <option key={uuid_v4()} value={color}>
+                    {color}
+                  </option>
+                ))}
+              </Form.Select>
+            </Form.Group>
+          </Col>
+          <Col sm={4}>
+            <Form.Group className='mb-3' controlId='captureSide'>
+              <Form.Label>Captured side:</Form.Label>
+              <Form.Select
+                name='captureSide'
+                value={captureSide}
+                onChange={handleChange}
+                onClick={handleClick}
+                multiple
+              >
+                {captureSideList.map(side => (
+                  <option key={uuid_v4()} value={side}>
+                    {side}
+                  </option>
+                ))}
+              </Form.Select>
+            </Form.Group>
+          </Col>
+        </Row>
+        <Row className='mt-5'>
+          <Button variant='success' type='submit' disabled={!currentObservation.isCat}>
+            Save metadata
+          </Button>
+        </Row>
+      </Form>
+      {!currentObservation.specimen && (
+        <Button
+          variant='warning'
+          onClick={() => updateObservationNotCat(currentObservation)}
+          disabled={!currentObservation.isCat}
+        >
+          This is not a cat!
         </Button>
-      </Row>
-    </Form>
+      )}
+    </Fragment>
   );
 };
 
