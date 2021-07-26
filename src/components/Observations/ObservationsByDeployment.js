@@ -1,10 +1,12 @@
 import { useState, useEffect, useCallback, useContext } from 'react';
 import axios from 'axios';
 import moment from 'moment';
+import Row from 'react-bootstrap/Row';
 import { Link, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import DataTable from 'react-data-table-component';
 import { AuthContext } from '../../context/AuthContext';
+import Loading from '../Navigation/Loading';
 
 const ObservationsByDeployment = () => {
   const { signOut } = useContext(AuthContext);
@@ -71,7 +73,9 @@ const ObservationsByDeployment = () => {
   ];
 
   return loading ? (
-    'Loading...'
+    <Row className='flex-column justify-content-center align-items-center vh-100'>
+      <Loading />
+    </Row>
   ) : (
     <DataTable
       title='Observations by deployment'

@@ -11,6 +11,7 @@ const ObservationState = ({ children }) => {
   const { signOut } = useContext(AuthContext);
   const [showCanvas, setShowCanvas] = useState(false);
   const [currentObservation, setCurrentObservation] = useState();
+  const [counters, setCounters] = useState([]);
   const [deployments, setDeployments] = useState([]);
   const [searchForm, setSearchForm] = useState(initialForm);
   const [queryMainMap, setQueryMainMap] = useState(initialForm);
@@ -28,6 +29,25 @@ const ObservationState = ({ children }) => {
           toast.error(error);
         }
         setDeployments(deployments);
+      } catch (error) {
+        toast.error('Service is offline. Contact your admin');
+        setTimeout(() => {
+          signOut();
+        }, 3000);
+      }
+    }
+  }, [signOut]);
+
+  const getCounters = useCallback(async () => {
+    if (axios.defaults.headers.common['token']) {
+      try {
+        const {
+          data: { counters, error }
+        } = await axios.get(`${process.env.REACT_APP_OBSERVATION_API}/observations/counters`);
+        if (error) {
+          toast.error(error);
+        }
+        setCounters(counters);
       } catch (error) {
         toast.error('Service is offline. Contact your admin');
         setTimeout(() => {
@@ -104,9 +124,14 @@ const ObservationState = ({ children }) => {
     getDeployments();
   }, [getDeployments]);
 
+  useEffect(() => {
+    getCounters();
+  }, [getCounters]);
+
   return (
     <ObservationContext.Provider
       value={{
+        counters,
         deployments,
         setQueryMainMap,
         loadingMap,

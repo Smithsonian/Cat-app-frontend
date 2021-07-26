@@ -11,20 +11,17 @@ const ProtectedRoute = ({ component: Component, admin, ...rest }) => {
     user: { role }
   } = useContext(AuthContext);
 
-  return isAuthenticated ? (
-    admin && role === 'user' ? (
-      <Redirect to='/observations' />
-    ) : (
-      <Fragment>
-        <Container fluid>
-          <ObservationsState>
-            <Route {...rest} render={() => <Component />} />
-          </ObservationsState>
-        </Container>
-      </Fragment>
-    )
-  ) : (
-    <Redirect to={{ pathname: '/', state: { next: pathname } }} />
+  if (!isAuthenticated) return <Redirect to={{ pathname: '/', state: { next: pathname } }} />;
+  if (admin && role === 'user') return <Redirect to='/observations' />;
+
+  return (
+    <Fragment>
+      <Container fluid>
+        <ObservationsState>
+          <Route {...rest} render={() => <Component />} />
+        </ObservationsState>
+      </Container>
+    </Fragment>
   );
 };
 
