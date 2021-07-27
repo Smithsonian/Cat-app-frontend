@@ -70,9 +70,9 @@ const ObservationsByDeployment = () => {
     },
     { name: 'Reason for review', selector: ({ reasonReview }) => reasonReview },
     {
-      name: 'Status, Pattern, Primary color, Secondary color',
-      selector: ({ status, pattern, primaryColor, secondaryColor }) =>
-        `${status}, ${pattern}, ${primaryColor}, ${secondaryColor}`
+      name: 'Pattern, Bicolor, Long hair, Sex,  Notched, Collar',
+      selector: ({ pattern, bicolor, longHair, sex, notched, collar }) =>
+        `${pattern}, ${bicolor}, ${longHair}, ${sex}, ${notched}, ${collar}`
     }
   ];
 
