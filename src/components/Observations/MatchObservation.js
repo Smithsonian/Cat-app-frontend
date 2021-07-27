@@ -35,10 +35,12 @@ const MatchObservation = () => {
       } = await axios.get(`${process.env.REACT_APP_OBSERVATION_API}/observations/${id}`);
       setCurrentObservation(observation);
       setQueryCandidates({
-        status: observation.status,
         pattern: observation.pattern,
-        primaryColor: observation.primaryColor,
-        secondaryColor: observation.secondaryColor,
+        bicolor: observation.bicolor,
+        longHair: observation.longHair,
+        sex: observation.sex,
+        notched: observation.notched,
+        collar: observation.collar,
         specimen: { exists: true },
         location: {
           geoWithin: {

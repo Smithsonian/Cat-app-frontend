@@ -70,8 +70,8 @@ const ObservationState = ({ children }) => {
   }, [signOut]);
 
   const updateObservationMeta = async observation => {
-    const { _id, status, pattern, primaryColor, secondaryColor, captureSide } = observation;
-    const fieldsToUpdate = { status, pattern, primaryColor, secondaryColor, captureSide };
+    const { _id, pattern, bicolor, longHair, sex, notched, collar } = observation;
+    const fieldsToUpdate = { pattern, bicolor, longHair, sex, notched, collar };
     try {
       const {
         data: { updatedObservation }
