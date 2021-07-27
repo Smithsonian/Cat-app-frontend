@@ -5,6 +5,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import ImageGallery from 'react-image-gallery';
+import { toast } from 'react-toastify';
 import moment from 'moment';
 import { AuthContext } from '../../context/AuthContext';
 import { ObservationContext } from '../../context/ObservationsContext';
@@ -14,7 +15,7 @@ import { renderLeftNav, renderRightNav } from '../../utils/imageGalleryHelpers';
 
 const MatchObservation = () => {
   const {
-    user: { role }
+    user: { role, signOut }
   } = useContext(AuthContext);
   const {
     currentObservation,
@@ -25,18 +26,13 @@ const MatchObservation = () => {
   } = useContext(ObservationContext);
   const { id } = useParams();
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(false);
 
   const getSingle = useCallback(async () => {
     setLoading(true);
     try {
       const {
-        data: { observation, error }
+        data: { observation }
       } = await axios.get(`${process.env.REACT_APP_OBSERVATION_API}/observations/${id}`);
-      if (error) {
-        setError(error);
-        setLoading(false);
-      }
       setCurrentObservation(observation);
       setQueryCandidates({
         status: observation.status,
@@ -51,17 +47,30 @@ const MatchObservation = () => {
         }
       });
       setLoading(false);
-    } catch (error) {
-      setError('Service is offline. Contact your admin');
-      setLoading(false);
+    } catch ({ response }) {
+      if (response) {
+        const {
+          data: { error }
+        } = response;
+        if (error) {
+          toast.error(error);
+          setTimeout(() => {
+            signOut();
+          }, 3000);
+        }
+      } else {
+        toast.error('Network error');
+        setTimeout(() => {
+          signOut();
+        }, 3000);
+      }
     }
-  }, [id, setCurrentObservation, setQueryCandidates]);
+  }, [id, setCurrentObservation, setQueryCandidates, signOut]);
 
   useEffect(() => {
     getSingle();
   }, [getSingle]);
 
-  if (error) return <div>{error.message}</div>;
   return !loading && currentObservation ? (
     <Fragment>
       <Row>

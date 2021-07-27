@@ -17,24 +17,31 @@ const AuthState = ({ children }) => {
     setLoading(true);
     try {
       const {
-        data: { user, error, details }
+        data: { user }
       } = await axios.post(`${process.env.REACT_APP_OBSERVATION_API}/auth/create-user`, newUser);
-      if (error) {
-        toast.error(error);
-        setLoading(false);
-      }
-      if (details) {
-        toast.error(details.message);
-        setLoading(false);
-      }
       if (user) {
         toast.success('User created. An email has been sent');
         setUsersInApp(prev => [user, ...prev]);
         setLoading(false);
       }
-    } catch (error) {
-      toast.error(error.message);
-      setLoading(false);
+    } catch ({ response }) {
+      if (response) {
+        const {
+          data: { error, details }
+        } = response;
+        if (error) {
+          toast.error(error);
+          setLoading(false);
+        }
+        if (details) {
+          toast.error(details[0].message);
+          setLoading(false);
+        }
+      } else {
+        toast.error('Network error');
+        setLoading(false);
+        setTimeout(() => signOut(), 3000);
+      }
     }
   };
 
@@ -42,16 +49,9 @@ const AuthState = ({ children }) => {
     setLoading(true);
     try {
       const {
-        data: { token, error, details }
+        data: { token }
       } = await axios.post(`${process.env.REACT_APP_OBSERVATION_API}/auth/signin`, credentials);
-      if (error) {
-        reportError(error);
-        setLoading(false);
-      }
-      if (details) {
-        reportError(details.message);
-        setLoading(false);
-      }
+
       if (token) {
         localStorage.setItem('token', token);
         setToken(token);
@@ -59,9 +59,23 @@ const AuthState = ({ children }) => {
         setIsAuthenticated(true);
         setLoading(false);
       }
-    } catch (error) {
-      reportError('Service is offline. Contact your admin');
-      setLoading(false);
+    } catch ({ response }) {
+      if (response) {
+        const {
+          data: { error, details }
+        } = response;
+        if (error) {
+          reportError(error);
+          setLoading(false);
+        }
+        if (details) {
+          reportError(details[0].message);
+          setLoading(false);
+        }
+      } else {
+        reportError('Network error');
+        setLoading(false);
+      }
     }
   };
 
@@ -84,7 +98,7 @@ const AuthState = ({ children }) => {
       };
       try {
         const {
-          data: { success, user, error }
+          data: { success, user }
         } = await axios.get(
           `${process.env.REACT_APP_OBSERVATION_API}/auth/verify-session`,
           options
@@ -94,17 +108,24 @@ const AuthState = ({ children }) => {
           setIsAuthenticated(true);
           setUser(user);
           setLoading(false);
-        } else if (error) {
-          localStorage.removeItem('token');
-          setIsAuthenticated(false);
-          reportError(error);
-          setLoading(false);
         }
-      } catch (error) {
-        localStorage.removeItem('token');
-        reportError('Service is offline. Contact your admin');
-        setLoading(false);
-        setTimeout(() => signOut(), 3000);
+      } catch ({ response }) {
+        if (response) {
+          const {
+            data: { error }
+          } = response;
+          if (error) {
+            localStorage.removeItem('token');
+            reportError(error);
+            setLoading(false);
+            setTimeout(() => signOut(), 3000);
+          }
+        } else {
+          localStorage.removeItem('token');
+          reportError('Network error');
+          setLoading(false);
+          setTimeout(() => signOut(), 3000);
+        }
       }
     }
   }, [token, signOut]);
@@ -125,11 +146,22 @@ const AuthState = ({ children }) => {
             setUsersInApp(users);
             setLoading(false);
           }
-        } catch (error) {
-          console.log(error);
-          toast.error('Service is offline. Contact your admin');
-          setLoading(false);
-          setTimeout(() => signOut(), 3000);
+        } catch ({ response }) {
+          if (response) {
+            const {
+              data: { error }
+            } = response;
+            if (error) {
+              localStorage.removeItem('token');
+              toast.error(error);
+              setLoading(false);
+            }
+          } else {
+            localStorage.removeItem('token');
+            toast.error('Network error');
+            setLoading(false);
+            setTimeout(() => signOut(), 3000);
+          }
         }
       }
     }

@@ -18,18 +18,11 @@ const useObservations = (query, map) => {
     if (axios.defaults.headers.common['token']) {
       try {
         const {
-          data: { observations, error }
+          data: { observations }
         } = await axios.post(
           `${process.env.REACT_APP_OBSERVATION_API}/observations`,
           sanitizedQuery
         );
-        if (error) {
-          toast.error(error);
-          setLoading(false);
-          setTimeout(() => {
-            signOut();
-          }, 3000);
-        }
         if (observations.length === 0) {
           toast.info('No results, try again');
           setObservations([]);
@@ -41,12 +34,22 @@ const useObservations = (query, map) => {
         }
         setObservations(observations);
         setLoading(false);
-      } catch (error) {
-        toast.error('Service is offline. Contact your admin');
-        setLoading(false);
-        setTimeout(() => {
-          signOut();
-        }, 3000);
+      } catch ({ response }) {
+        if (response) {
+          const {
+            data: { error }
+          } = response;
+          if (error) {
+            toast.error(error);
+            setLoading(false);
+          }
+        } else {
+          toast.error('Network error');
+          setLoading(false);
+          setTimeout(() => {
+            signOut();
+          }, 3000);
+        }
       }
     }
   }, [query, signOut, map]);

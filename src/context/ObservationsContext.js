@@ -23,17 +23,23 @@ const ObservationState = ({ children }) => {
     if (axios.defaults.headers.common['token']) {
       try {
         const {
-          data: { deployments, error }
+          data: { deployments }
         } = await axios.get(`${process.env.REACT_APP_OBSERVATION_API}/observations/deployments`);
-        if (error) {
-          toast.error(error);
-        }
         setDeployments(deployments);
-      } catch (error) {
-        toast.error('Service is offline. Contact your admin');
-        setTimeout(() => {
-          signOut();
-        }, 3000);
+      } catch ({ response }) {
+        if (response) {
+          const {
+            data: { error }
+          } = response;
+          if (error) {
+            toast.error(error);
+          }
+        } else {
+          toast.error('Network error');
+          setTimeout(() => {
+            signOut();
+          }, 3000);
+        }
       }
     }
   }, [signOut]);
@@ -42,17 +48,23 @@ const ObservationState = ({ children }) => {
     if (axios.defaults.headers.common['token']) {
       try {
         const {
-          data: { counters, error }
+          data: { counters }
         } = await axios.get(`${process.env.REACT_APP_OBSERVATION_API}/observations/counters`);
-        if (error) {
-          toast.error(error);
-        }
         setCounters(counters);
-      } catch (error) {
-        toast.error('Service is offline. Contact your admin');
-        setTimeout(() => {
-          signOut();
-        }, 3000);
+      } catch ({ response }) {
+        if (response) {
+          const {
+            data: { error }
+          } = response;
+          if (error) {
+            toast.error(error);
+          }
+        } else {
+          toast.error('Network error');
+          setTimeout(() => {
+            signOut();
+          }, 3000);
+        }
       }
     }
   }, [signOut]);
@@ -69,8 +81,20 @@ const ObservationState = ({ children }) => {
       );
       renderUpdatedObservation(_id, updatedObservation);
       toast.success('Updated');
-    } catch (error) {
-      toast.error(`Error: ${error.message}`);
+    } catch ({ response }) {
+      if (response) {
+        const {
+          data: { error }
+        } = response;
+        if (error) {
+          toast.error(error);
+        }
+      } else {
+        toast.error('Network error');
+        setTimeout(() => {
+          signOut();
+        }, 3000);
+      }
     }
   };
 
@@ -86,8 +110,20 @@ const ObservationState = ({ children }) => {
       );
       renderUpdatedObservation(_id, updatedObservation);
       toast.success('Updated');
-    } catch (error) {
-      toast.error(`Error: ${error.message}`);
+    } catch ({ response }) {
+      if (response) {
+        const {
+          data: { error }
+        } = response;
+        if (error) {
+          toast.error(error);
+        }
+      } else {
+        toast.error('Network error');
+        setTimeout(() => {
+          signOut();
+        }, 3000);
+      }
     }
   };
 
@@ -98,8 +134,20 @@ const ObservationState = ({ children }) => {
       );
       renderUpdatedObservation(obsId, data);
       toast.success('Identification created');
-    } catch (error) {
-      toast.error(`Error: ${error.message}`);
+    } catch ({ response }) {
+      if (response) {
+        const {
+          data: { error }
+        } = response;
+        if (error) {
+          toast.error(error);
+        }
+      } else {
+        toast.error('Network error');
+        setTimeout(() => {
+          signOut();
+        }, 3000);
+      }
     }
   };
 
@@ -110,8 +158,20 @@ const ObservationState = ({ children }) => {
       );
       renderUpdatedObservation(obsId, data);
       toast.info('Identification removed');
-    } catch (error) {
-      toast.error(`Error: ${error.message}`);
+    } catch ({ response }) {
+      if (response) {
+        const {
+          data: { error }
+        } = response;
+        if (error) {
+          toast.error(error);
+        }
+      } else {
+        toast.error('Network error');
+        setTimeout(() => {
+          signOut();
+        }, 3000);
+      }
     }
   };
 

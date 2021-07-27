@@ -18,17 +18,10 @@ const ObservationsForReview = () => {
     if (axios.defaults.headers.common['token']) {
       try {
         const {
-          data: { observations, error }
+          data: { observations }
         } = await axios.post(`${process.env.REACT_APP_OBSERVATION_API}/observations`, {
           forReview: true
         });
-        if (error) {
-          toast.error(error);
-          setLoading(false);
-          setTimeout(() => {
-            signOut();
-          }, 3000);
-        }
         if (observations.length === 0) {
           toast.info('Nothing to review');
           setObservations([]);
@@ -37,12 +30,21 @@ const ObservationsForReview = () => {
         }
         setObservations(observations);
         setLoading(false);
-      } catch (error) {
-        toast.error('Service is offline. Contact your admin');
-        setLoading(false);
-        setTimeout(() => {
-          signOut();
-        }, 3000);
+      } catch ({ response }) {
+        if (response) {
+          const {
+            data: { error }
+          } = response;
+          if (error) {
+            toast.error(error);
+            setLoading(false);
+          }
+        } else {
+          toast.error('Network error');
+          setTimeout(() => {
+            signOut();
+          }, 3000);
+        }
       }
     }
   }, [signOut]);
