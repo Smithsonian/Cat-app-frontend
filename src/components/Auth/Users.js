@@ -1,9 +1,14 @@
 import { useContext } from 'react';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
+import Button from 'react-bootstrap/Button';
+import Badge from 'react-bootstrap/Badge';
 import DataTable from 'react-data-table-component';
 import { AuthContext } from '../../context/AuthContext';
 
 const Users = () => {
-  const { usersInApp } = useContext(AuthContext);
+  const { usersInApp, toggleRole, toggleStatus } = useContext(AuthContext);
+
   const columns = [
     {
       name: 'Name',
@@ -17,9 +22,37 @@ const Users = () => {
     },
     {
       name: 'Status',
-      selector: ({ active }) => (active ? 'Active' : 'Inactive')
+      selector: ({ active }) => (
+        <h6>
+          <Badge bg={active ? 'success' : 'danger'}>{active ? 'Active' : 'Disabled'}</Badge>
+        </h6>
+      )
     },
-    { name: 'Role', selector: ({ role }) => role }
+    {
+      name: 'Role',
+      selector: ({ role }) => (
+        <h6>
+          <Badge bg={role === 'user' ? 'dark' : 'warning'}>{role}</Badge>
+        </h6>
+      )
+    },
+    {
+      name: 'Actions',
+      selector: ({ _id }) => (
+        <Row>
+          <Col>
+            <Button variant='info' onClick={() => toggleRole(_id)}>
+              Toggle role
+            </Button>
+          </Col>
+          <Col>
+            <Button variant='danger' onClick={() => toggleStatus(_id)}>
+              Toggle status
+            </Button>
+          </Col>
+        </Row>
+      )
+    }
   ];
   return (
     <DataTable

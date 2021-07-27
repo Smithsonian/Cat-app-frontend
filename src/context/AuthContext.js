@@ -45,6 +45,60 @@ const AuthState = ({ children }) => {
     }
   };
 
+  const toggleStatus = async id => {
+    setLoading(true);
+    try {
+      const { data } = await axios.patch(
+        `${process.env.REACT_APP_OBSERVATION_API}/auth/status/${id}`
+      );
+
+      toast.success(`User's status updated`);
+      setUsersInApp(prev => prev.map(u => (u._id === id ? data : u)));
+      setLoading(false);
+    } catch ({ response }) {
+      if (response) {
+        const {
+          data: { error }
+        } = response;
+        if (error) {
+          toast.error(error);
+          setLoading(false);
+        }
+      } else {
+        toast.error('Network error');
+        setLoading(false);
+        setTimeout(() => signOut(), 3000);
+      }
+    }
+  };
+
+  const toggleRole = async id => {
+    setLoading(true);
+    try {
+      const { data } = await axios.patch(
+        `${process.env.REACT_APP_OBSERVATION_API}/auth/role/${id}`
+      );
+
+      toast.success(`User's role updated`);
+      setUsersInApp(prev => prev.map(u => (u._id === id ? data : u)));
+      setLoading(false);
+    } catch ({ response }) {
+      if (response) {
+        const {
+          data: { error }
+        } = response;
+        if (error) {
+          toast.error(error);
+          setLoading(false);
+        }
+      } else {
+        toast.error('Network error');
+        setLoading(false);
+        setTimeout(() => signOut(), 3000);
+      }
+    }
+  };
+
   const signIn = async credentials => {
     setLoading(true);
     try {
@@ -136,14 +190,10 @@ const AuthState = ({ children }) => {
         setLoading(true);
         try {
           const {
-            data: { users, error }
+            data: { users }
           } = await axios.get(`${process.env.REACT_APP_OBSERVATION_API}/auth/users`);
-          if (error) {
-            toast.error(error);
-            setLoading(false);
-          }
           if (users) {
-            setUsersInApp(users);
+            setUsersInApp(users.filter(u => u._id !== user._id));
             setLoading(false);
           }
         } catch ({ response }) {
@@ -152,12 +202,10 @@ const AuthState = ({ children }) => {
               data: { error }
             } = response;
             if (error) {
-              localStorage.removeItem('token');
               toast.error(error);
               setLoading(false);
             }
           } else {
-            localStorage.removeItem('token');
             toast.error('Network error');
             setLoading(false);
             setTimeout(() => signOut(), 3000);
@@ -190,6 +238,8 @@ const AuthState = ({ children }) => {
         usersInApp,
         error,
         createUser,
+        toggleStatus,
+        toggleRole,
         signIn,
         signOut
       }}
