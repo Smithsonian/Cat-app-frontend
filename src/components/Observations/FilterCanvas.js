@@ -7,12 +7,12 @@ import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { v4 as uuid_v4 } from 'uuid';
 import { ObservationContext } from '../../context/ObservationsContext';
-import { statusList, patternList, colorList } from '../../utils/searchFormHelpers';
+import { patternList, genericList, sexList } from '../../utils/searchFormHelpers';
 
 const ObservationCanvas = ({ currentObservation }) => {
   const { setQueryCandidates } = useContext(ObservationContext);
   const [matchFilter, setMatchFilter] = useState(currentObservation);
-  const { status, pattern, primaryColor, secondaryColor } = matchFilter;
+  const { pattern, bicolor, longHair, sex, notched, collar } = matchFilter;
   const [edited, setEdited] = useState(false);
   const [show, setShow] = useState(false);
   const toggleShow = () => setShow(prev => !prev);
@@ -28,7 +28,7 @@ const ObservationCanvas = ({ currentObservation }) => {
   const handleSubmit = event => {
     event.preventDefault();
     if (!edited) return toast.info(`Filters haven't changed`);
-    setQueryCandidates(prev => ({ ...prev, status, pattern, primaryColor, secondaryColor }));
+    setQueryCandidates(prev => ({ ...prev, ...matchFilter }));
     setEdited(false);
   };
 
@@ -59,42 +59,62 @@ const ObservationCanvas = ({ currentObservation }) => {
           <Offcanvas.Body>
             <Form onSubmit={handleSubmit}>
               <Row className='align-items-center'>
-                <Form.Group className='mb-3' controlId='status'>
-                  <Form.Label>Status</Form.Label>
-                  <Form.Select name='status' value={status} onChange={handleChange}>
-                    {statusList.map(status => (
-                      <option key={uuid_v4()} value={status}>
-                        {status}
-                      </option>
-                    ))}
-                  </Form.Select>
-                </Form.Group>
                 <Form.Group className='mb-3' controlId='pattern'>
-                  <Form.Label>Pattern</Form.Label>
+                  <Form.Label>Pattern:</Form.Label>
                   <Form.Select name='pattern' value={pattern} onChange={handleChange}>
-                    {patternList.map(pattern => (
-                      <option key={uuid_v4()} value={pattern}>
-                        {pattern}
+                    {patternList.map(option => (
+                      <option key={uuid_v4()} value={option}>
+                        {option}
                       </option>
                     ))}
                   </Form.Select>
                 </Form.Group>
-                <Form.Group className='mb-3' controlId='primaryColor'>
-                  <Form.Label>Primary color:</Form.Label>
-                  <Form.Select name='primaryColor' value={primaryColor} onChange={handleChange}>
-                    {colorList.map(color => (
-                      <option key={uuid_v4()} value={color}>
-                        {color}
+                <Form.Group className='mb-3' controlId='bicolor'>
+                  <Form.Label>Bicolor:</Form.Label>
+                  <Form.Select name='bicolor' value={bicolor} onChange={handleChange}>
+                    {genericList.map(option => (
+                      <option key={uuid_v4()} value={option}>
+                        {option}
                       </option>
                     ))}
                   </Form.Select>
                 </Form.Group>
-                <Form.Group className='mb-3' controlId='secondaryColor'>
-                  <Form.Label>Secondary color:</Form.Label>
-                  <Form.Select name='secondaryColor' value={secondaryColor} onChange={handleChange}>
-                    {colorList.map(color => (
-                      <option key={uuid_v4()} value={color}>
-                        {color}
+                <Form.Group className='mb-3' controlId='longHair'>
+                  <Form.Label>Long hair:</Form.Label>
+                  <Form.Select name='longHair' value={longHair} onChange={handleChange}>
+                    {genericList.map(option => (
+                      <option key={uuid_v4()} value={option}>
+                        {option}
+                      </option>
+                    ))}
+                  </Form.Select>
+                </Form.Group>
+                <Form.Group className='mb-3' controlId='sex'>
+                  <Form.Label>Sex:</Form.Label>
+                  <Form.Select name='sex' value={sex} onChange={handleChange}>
+                    {sexList.map(option => (
+                      <option key={uuid_v4()} value={option}>
+                        {option}
+                      </option>
+                    ))}
+                  </Form.Select>
+                </Form.Group>
+                <Form.Group className='mb-3' controlId='notched'>
+                  <Form.Label>Notched:</Form.Label>
+                  <Form.Select name='notched' value={notched} onChange={handleChange}>
+                    {genericList.map(option => (
+                      <option key={uuid_v4()} value={option}>
+                        {option}
+                      </option>
+                    ))}
+                  </Form.Select>
+                </Form.Group>
+                <Form.Group className='mb-3' controlId='collar'>
+                  <Form.Label>Collar:</Form.Label>
+                  <Form.Select name='collar' value={collar} onChange={handleChange}>
+                    {genericList.map(option => (
+                      <option key={uuid_v4()} value={option}>
+                        {option}
                       </option>
                     ))}
                   </Form.Select>
