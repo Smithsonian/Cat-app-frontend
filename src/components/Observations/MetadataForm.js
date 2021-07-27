@@ -3,9 +3,11 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
+import moment from 'moment';
 import { v4 as uuid_v4 } from 'uuid';
 import { toast } from 'react-toastify';
 import { ObservationContext } from '../../context/ObservationsContext';
+import ProtocolModal from './ProtocolModal';
 import { patternList, genericList, sexList } from '../../utils/searchFormHelpers';
 
 const MetadataForm = ({ currentObservation }) => {
@@ -13,6 +15,7 @@ const MetadataForm = ({ currentObservation }) => {
   const [metaDataForm, setMetaDataForm] = useState(currentObservation);
   const { pattern, bicolor, longHair, sex, notched, collar } = metaDataForm;
   const [edited, setEdited] = useState(false);
+  const [protocolShow, setProtocolShow] = useState(false);
 
   const handleChange = event => {
     setMetaDataForm(prev => ({
@@ -31,6 +34,23 @@ const MetadataForm = ({ currentObservation }) => {
 
   return (
     <Fragment>
+      <Row className='justify-content-between'>
+        <Col>
+          <span className='fw-bold'>Observed on: </span>
+          {moment(currentObservation.date_time_original).format('MMMM Do YYYY, h:mm:ss a')}
+        </Col>
+        <Col>
+          <span className='fw-bold'>Latitude:</span> {currentObservation.location.coordinates[1]}
+          <span className='fw-bold'> / </span>
+          <span className='fw-bold'>Longitude:</span> {currentObservation.location.coordinates[0]}
+        </Col>
+        <Col xs={1}>
+          <Button variant='info' onClick={() => setProtocolShow(true)}>
+            💡
+          </Button>
+          <ProtocolModal show={protocolShow} onHide={() => setProtocolShow(false)} />
+        </Col>
+      </Row>
       <Form onSubmit={handleSubmit} className='mb-3'>
         <Row className='align-items-center'>
           <Col sm={4}>

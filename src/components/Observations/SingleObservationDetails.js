@@ -5,7 +5,6 @@ import Button from 'react-bootstrap/Button';
 import ImageGallery from 'react-image-gallery';
 import { toast } from 'react-toastify';
 import { Link } from 'react-router-dom';
-import moment from 'moment';
 import { ObservationContext } from '../../context/ObservationsContext';
 import { AuthContext } from '../../context/AuthContext';
 import StaticMap from '../Leaflet/StaticMap';
@@ -39,18 +38,7 @@ const SingleObservationDetails = ({ currentObservation, fullscreen }) => {
           </Row>
         </Col>
       )}
-      <Row className={fullscreen ? 'mb-3 mt-5' : 'mb-3'}>
-        <Col>
-          <span className='fw-bold'>Observed on: </span>
-          {moment(currentObservation.date_time_original).format('MMMM Do YYYY, h:mm:ss a')}
-        </Col>
-        <Col>
-          <span className='fw-bold'>Latitude:</span> {currentObservation.location.coordinates[1]}
-          <span className='fw-bold'> / </span>
-          <span className='fw-bold'>Longitude:</span> {currentObservation.location.coordinates[0]}
-        </Col>
-      </Row>
-      <Row className='mb-3'>
+      <Row className='my-5'>
         <Col md={fullscreen ? 6 : 12} className={!fullscreen ? 'px3 mb-5' : 'px-3'}>
           <Row className='flex-column justify-content-between h-100'>
             <Col className='mb-3'>
@@ -69,7 +57,7 @@ const SingleObservationDetails = ({ currentObservation, fullscreen }) => {
             </Col>
             <Col>
               {currentObservation.isCat && (
-                <Row className='justify-content-around'>
+                <Row className='justify-content-around mb-3'>
                   {currentObservation.specimen ? (
                     <Fragment>
                       <Button className='mb-3'>Specimen ID: {currentObservation.specimen}</Button>
