@@ -21,8 +21,7 @@ const ObservationsByDeployment = () => {
         const {
           data: { observations }
         } = await axios.post(`${process.env.REACT_APP_OBSERVATION_API}/observations`, {
-          deployment_id: id,
-          forReview: false
+          deployment_id: id
         });
         if (observations.length === 0) {
           toast.info('Nothing to review');

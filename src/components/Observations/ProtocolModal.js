@@ -2,7 +2,6 @@ import Container from 'react-bootstrap/Container';
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import Image from 'react-bootstrap/Image';
-import protocol from '../../assets/protocol.png';
 
 const ProtocolModal = props => {
   return (
@@ -12,7 +11,7 @@ const ProtocolModal = props => {
       </Modal.Header>
       <Modal.Body>
         <Container>
-          <Image src={protocol} />
+          <Image src='/protocol.png' />
         </Container>
       </Modal.Body>
       <Modal.Footer>
