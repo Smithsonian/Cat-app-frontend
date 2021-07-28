@@ -59,7 +59,12 @@ const ObservationsForReview = () => {
       selector: ({ _id }) => <Link to={`/observation/${_id}`}>{_id}</Link>,
       sortable: true
     },
-    { name: 'Deployment ID', selector: ({ deployment_id }) => deployment_id },
+    {
+      name: 'Deployment ID',
+      selector: ({ deployment_id }) => (
+        <Link to={`/deployment/${deployment_id}`}>{deployment_id}</Link>
+      )
+    },
     {
       name: 'Cat ID',
       selector: ({ specimen }) => specimen

@@ -98,9 +98,50 @@ const ObservationState = ({ children }) => {
     }
   };
 
-  const updateObservationNotCat = async observation => {
+  const updateObservationNotCat = async (observation, notCat) => {
     const { _id } = observation;
-    const fieldsToUpdate = { isCat: false, forReview: true, reasonReview: 'No cat' };
+    const fieldsToUpdate = notCat
+      ? { isCat: false, forReview: true, reasonReview: 'No cat' }
+      : { notID: true, forReview: true, reasonReview: 'Unidentifiable' };
+    try {
+      const {
+        data: { updatedObservation }
+      } = await axios.patch(
+        `${process.env.REACT_APP_OBSERVATION_API}/observations/${_id}`,
+        fieldsToUpdate
+      );
+      renderUpdatedObservation(_id, updatedObservation);
+      toast.success('Updated');
+    } catch ({ response }) {
+      if (response) {
+        const {
+          data: { error }
+        } = response;
+        if (error) {
+          toast.error(error);
+        }
+      } else {
+        toast.error('Network error');
+        setTimeout(() => {
+          signOut();
+        }, 3000);
+      }
+    }
+  };
+
+  const updateObservationApproval = async (observation, approve) => {
+    const { _id } = observation;
+    const fieldsToUpdate = { forReview: 'false' };
+    if (approve) {
+      fieldsToUpdate.reasonReview = observation.reasonReview;
+    } else {
+      fieldsToUpdate.reasonReview = 'None';
+      if (observation.reasonReview === 'No cat') {
+        fieldsToUpdate.isCat = true;
+      } else if (observation.reasonReview === 'Unidentifiable') {
+        fieldsToUpdate.notID = false;
+      }
+    }
     try {
       const {
         data: { updatedObservation }
@@ -208,6 +249,7 @@ const ObservationState = ({ children }) => {
         setShowCanvas,
         updateObservationMeta,
         updateObservationNotCat,
+        updateObservationApproval,
         saveNewCat,
         removeIdentification
       }}
