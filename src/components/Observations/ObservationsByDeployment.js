@@ -59,18 +59,22 @@ const ObservationsByDeployment = () => {
 
   const columns = [
     {
-      name: 'ID',
+      name: 'Observation ID',
       selector: ({ _id }) => <Link to={`/observation/${_id}`}>{_id}</Link>,
       sortable: true
     },
     { name: 'Deployment ID', selector: ({ deployment_id }) => deployment_id },
+    {
+      name: 'Cat ID',
+      selector: ({ specimen }) => specimen
+    },
     {
       name: 'Date',
       selector: ({ date_time_original }) => moment(date_time_original).format('MM/DD/YYYY')
     },
     { name: 'Reason for review', selector: ({ reasonReview }) => reasonReview },
     {
-      name: 'Pattern, Bicolor, Long hair, Sex,  Notched, Collar',
+      name: 'Pattern, Bicolor, Long hair, Sex,  Notched ear, Collar',
       selector: ({ pattern, bicolor, longHair, sex, notched, collar }) =>
         `${pattern}, ${bicolor}, ${longHair}, ${sex}, ${notched}, ${collar}`
     }

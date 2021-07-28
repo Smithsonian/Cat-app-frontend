@@ -3,7 +3,6 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import ImageGallery from 'react-image-gallery';
-import { toast } from 'react-toastify';
 import { Link } from 'react-router-dom';
 import { ObservationContext } from '../../context/ObservationsContext';
 import { AuthContext } from '../../context/AuthContext';
@@ -70,16 +69,7 @@ const SingleObservationDetails = ({ currentObservation, fullscreen }) => {
                     </Fragment>
                   ) : (
                     <Fragment>
-                      <Button
-                        className='mb-3'
-                        onClick={() =>
-                          currentObservation.captureSide.length !== 0
-                            ? saveNewCat(currentObservation._id)
-                            : toast.warning(
-                                'Please edit the captured side before creating a new identification'
-                              )
-                        }
-                      >
+                      <Button className='mb-3' onClick={() => saveNewCat(currentObservation._id)}>
                         Save as new cat
                       </Button>
                       <Button as={Link} to={`/match/${currentObservation._id}`} variant='info'>

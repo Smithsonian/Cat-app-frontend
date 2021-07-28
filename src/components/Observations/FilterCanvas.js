@@ -100,7 +100,7 @@ const ObservationCanvas = ({ currentObservation }) => {
                   </Form.Select>
                 </Form.Group>
                 <Form.Group className='mb-3' controlId='notched'>
-                  <Form.Label>Notched:</Form.Label>
+                  <Form.Label>Notched ear:</Form.Label>
                   <Form.Select name='notched' value={notched} onChange={handleChange}>
                     {genericList.map(option => (
                       <option key={uuid_v4()} value={option}>
