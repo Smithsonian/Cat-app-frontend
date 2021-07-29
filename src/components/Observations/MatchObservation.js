@@ -11,18 +11,19 @@ import { AuthContext } from '../../context/AuthContext';
 import { ObservationContext } from '../../context/ObservationsContext';
 import FilterCanvas from './FilterCanvas';
 import Loading from '../Navigation/Loading';
+import MatchCandidate from './MatchCandidate';
 import { renderLeftNav, renderRightNav } from '../../utils/imageGalleryHelpers';
 
 const MatchObservation = () => {
   const {
-    user: { role, signOut }
+    user: { signOut }
   } = useContext(AuthContext);
   const {
     currentObservation,
     setCurrentObservation,
     setQueryCandidates,
     removeIdentification,
-    observationCandidates
+    candidates
   } = useContext(ObservationContext);
   const { id } = useParams();
   const [loading, setLoading] = useState(false);
@@ -38,15 +39,8 @@ const MatchObservation = () => {
         pattern: observation.pattern,
         bicolor: observation.bicolor,
         longHair: observation.longHair,
-        sex: observation.sex,
-        notched: observation.notched,
-        collar: observation.collar,
-        specimen: { exists: true },
-        location: {
-          geoWithin: {
-            centerSphere: [observation.location.coordinates, 5 / 3959]
-          }
-        }
+        coordinates: observation.location.coordinates,
+        distance: 0.5
       });
       setLoading(false);
     } catch ({ response }) {
@@ -73,21 +67,18 @@ const MatchObservation = () => {
     getSingle();
   }, [getSingle]);
 
+  if (!loading && currentObservation && (currentObservation.notCat || currentObservation.notID))
+    return (
+      <Row className='flex-column justify-content-center align-items-center'>
+        This observation is flagged as either "Not a cat" or "Unidentifiable", you can not find a
+        match for it
+      </Row>
+    );
   return !loading && currentObservation ? (
     <Fragment>
       <Row>
         <FilterCanvas currentObservation={currentObservation} />
       </Row>
-      {role !== 'user' && currentObservation.forReview && (
-        <Row className='justify-content-around'>
-          <Col sm={1}>
-            <Button variant='success'>Approve</Button>
-          </Col>
-          <Col sm={1}>
-            <Button variant='danger'>Reject</Button>
-          </Col>
-        </Row>
-      )}
       <Row className='mb-3 mt-5'>
         <Col>
           <span className='fw-bold'>Observed on: </span>
@@ -134,22 +125,21 @@ const MatchObservation = () => {
           </Row>
         </Col>
         <Col md={6} className='px-3' style={{ overflowY: 'scroll', height: '600px' }}>
-          {observationCandidates.map(candidate => (
-            <Row className='flex-column justify-content-between mb-3'>
-              <ImageGallery
-                lazyLoad={true}
-                showPlayButton={false}
-                renderLeftNav={renderLeftNav}
-                renderRightNav={renderRightNav}
-                thumbnailPosition='left'
-                items={candidate.images.map(image => ({
-                  fullscreen: `${process.env.REACT_APP_IMAGE_BUCKET}/${image.image_id}_o.jpg`,
-                  original: `${process.env.REACT_APP_IMAGE_BUCKET}/${image.image_id}_o.jpg`,
-                  thumbnail: `${process.env.REACT_APP_IMAGE_BUCKET}/${image.image_id}_m.jpg`
-                }))}
-              />
+          {currentObservation.specimen ? (
+            <Row className='justify-content-center align-items-center'>
+              Cannot match an observation with an existent ID
             </Row>
-          ))}
+          ) : candidates.length !== 0 ? (
+            candidates.map(candidate => (
+              <Row className='flex-column justify-content-between mb-3'>
+                <MatchCandidate candidate={candidate} />
+              </Row>
+            ))
+          ) : (
+            <Row className='justify-content-center align-items-center'>
+              <Loading />
+            </Row>
+          )}
         </Col>
       </Row>
     </Fragment>

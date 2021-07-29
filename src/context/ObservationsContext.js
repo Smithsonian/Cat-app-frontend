@@ -3,6 +3,7 @@ import { toast } from 'react-toastify';
 import axios from 'axios';
 import useObservations from '../utils/useObservations';
 import { initialForm } from '../utils/searchFormHelpers';
+import useDidUpdateEffect from '../utils/useDidUpdateEffect';
 import { AuthContext } from '../context/AuthContext';
 
 export const ObservationContext = createContext();
@@ -17,7 +18,7 @@ const ObservationState = ({ children }) => {
   const [queryMainMap, setQueryMainMap] = useState(initialForm);
   const [loadingMap, observationsMap, setObservationsMap] = useObservations(queryMainMap, true);
   const [queryCandidates, setQueryCandidates] = useState({});
-  const [loadingCandidates, observationCandidates] = useObservations(queryCandidates);
+  const [candidates, setCandidates] = useState([]);
 
   const getDeployments = useCallback(async () => {
     if (axios.defaults.headers.common['token']) {
@@ -68,6 +69,32 @@ const ObservationState = ({ children }) => {
       }
     }
   }, [signOut]);
+
+  const getCandidates = useCallback(async () => {
+    if (axios.defaults.headers.common['token']) {
+      try {
+        const { data } = await axios.post(
+          `${process.env.REACT_APP_OBSERVATION_API}/observations/candidates`,
+          queryCandidates
+        );
+        setCandidates(data);
+      } catch ({ response }) {
+        if (response) {
+          const {
+            data: { error }
+          } = response;
+          if (error) {
+            toast.error(error);
+          }
+        } else {
+          toast.error('Network error');
+          setTimeout(() => {
+            signOut();
+          }, 3000);
+        }
+      }
+    }
+  }, [queryCandidates, signOut]);
 
   const updateObservationMeta = async observation => {
     const { _id, pattern, bicolor, longHair, sex, notched, collar } = observation;
@@ -221,13 +248,11 @@ const ObservationState = ({ children }) => {
     setObservationsMap(prev => prev.map(obs => (obs._id === id ? observation : obs)));
   };
 
-  useEffect(() => {
-    getDeployments();
-  }, [getDeployments]);
+  useEffect(() => getDeployments(), [getDeployments]);
 
-  useEffect(() => {
-    getCounters();
-  }, [getCounters]);
+  useEffect(() => getCounters(), [getCounters]);
+
+  useDidUpdateEffect(() => getCandidates(), [getCandidates]);
 
   return (
     <ObservationContext.Provider
@@ -240,9 +265,8 @@ const ObservationState = ({ children }) => {
         setObservationsMap,
         searchForm,
         setSearchForm,
+        candidates,
         setQueryCandidates,
-        loadingCandidates,
-        observationCandidates,
         currentObservation,
         setCurrentObservation,
         showCanvas,

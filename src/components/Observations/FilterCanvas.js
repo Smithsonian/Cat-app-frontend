@@ -9,7 +9,7 @@ import { v4 as uuid_v4 } from 'uuid';
 import { ObservationContext } from '../../context/ObservationsContext';
 import { patternList, genericList, sexList } from '../../utils/searchFormHelpers';
 
-const ObservationCanvas = ({ currentObservation }) => {
+const FilterCanvas = ({ currentObservation }) => {
   const { setQueryCandidates } = useContext(ObservationContext);
   const [matchFilter, setMatchFilter] = useState(currentObservation);
   const { pattern, bicolor, longHair, sex, notched, collar } = matchFilter;
@@ -133,4 +133,4 @@ const ObservationCanvas = ({ currentObservation }) => {
   );
 };
 
-export default ObservationCanvas;
+export default FilterCanvas;
