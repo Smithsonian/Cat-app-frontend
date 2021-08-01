@@ -4,6 +4,8 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import { v4 as uuid_v4 } from 'uuid';
 import { ObservationContext } from '../../context/ObservationsContext';
 import { patternList, sexList, genericList } from '../../utils/searchFormHelpers';
@@ -64,7 +66,7 @@ const SearchCanvas = () => {
           left: 5
         }}
       >
-        🔍
+        <FontAwesomeIcon icon={faSearch} />
       </Button>
       <Offcanvas show={show} onHide={toggleShow} placement='start'>
         <Offcanvas.Header closeButton>
@@ -247,7 +249,7 @@ const SearchCanvas = () => {
                 </Form.Group>
               </Col>
             </Row>
-            <Row className='mt-5'>
+            <Row className='mt-2'>
               <Button variant='warning' type='submit'>
                 Search
               </Button>

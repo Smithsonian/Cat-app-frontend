@@ -19,6 +19,7 @@ const MatchObservation = () => {
     user: { signOut }
   } = useContext(AuthContext);
   const {
+    loadingCandidates,
     currentObservation,
     setCurrentObservation,
     setQueryCandidates,
@@ -124,20 +125,24 @@ const MatchObservation = () => {
             </Col>
           </Row>
         </Col>
-        <Col md={6} className='px-3' style={{ overflowY: 'scroll', height: '600px' }}>
+        <Col md={6} className='px-3' style={{ overflowY: 'scroll', height: '800px' }}>
           {currentObservation.specimen ? (
             <Row className='justify-content-center align-items-center'>
               Cannot match an observation with an existent ID
             </Row>
+          ) : loadingCandidates ? (
+            <Row className='justify-content-center align-items-center'>
+              <Loading />
+            </Row>
           ) : candidates.length !== 0 ? (
             candidates.map(candidate => (
-              <Row className='flex-column justify-content-between mb-3'>
+              <Row className='flex-column justify-content-between mb-3' key={candidate._id}>
                 <MatchCandidate candidate={candidate} />
               </Row>
             ))
           ) : (
             <Row className='justify-content-center align-items-center'>
-              <Loading />
+              Could not find potential canditates
             </Row>
           )}
         </Col>

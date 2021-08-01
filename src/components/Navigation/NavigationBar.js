@@ -3,6 +3,8 @@ import { Link, NavLink } from 'react-router-dom';
 import Container from 'react-bootstrap/Container';
 import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCat } from '@fortawesome/free-solid-svg-icons';
 import { AuthContext } from '../../context/AuthContext';
 
 const NavigationBar = () => {
@@ -22,7 +24,8 @@ const NavigationBar = () => {
     >
       <Container fluid>
         <Navbar.Brand as={Link} to='/'>
-          Count cats 🐾
+          Count cats
+          <FontAwesomeIcon icon={faCat} />
         </Navbar.Brand>
         {name && (
           <Fragment>

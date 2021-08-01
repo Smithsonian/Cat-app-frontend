@@ -29,6 +29,6 @@ export const patternList = [
   'Unknown'
 ];
 
-export const sexList = ['Male', 'Female/neutered', 'Unknown'];
+export const sexList = ['Male', 'Female/Neutered', 'Unknown'];
 
 export const genericList = ['Yes', 'No', 'Unknown'];

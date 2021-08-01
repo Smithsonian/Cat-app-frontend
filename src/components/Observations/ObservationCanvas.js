@@ -1,7 +1,10 @@
 import { useContext, Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import Offcanvas from 'react-bootstrap/Offcanvas';
+import Row from 'react-bootstrap/Row';
 import Button from 'react-bootstrap/Button';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCat } from '@fortawesome/free-solid-svg-icons';
 import { ObservationContext } from '../../context/ObservationsContext';
 import SingleObservationDetails from './SingleObservationDetails';
 
@@ -24,7 +27,7 @@ const ObservationCanvas = () => {
           right: 5
         }}
       >
-        🐈
+        <FontAwesomeIcon icon={faCat} />
       </Button>
       <Offcanvas show={showCanvas} onHide={toggleShow} placement='end'>
         {currentObservation ? (
@@ -39,7 +42,12 @@ const ObservationCanvas = () => {
             </Offcanvas.Body>
           </Fragment>
         ) : (
-          'No selection'
+          <Fragment>
+            <Offcanvas.Header closeButton></Offcanvas.Header>
+            <Offcanvas.Body>
+              <Row className='justify-content-center'>No observation has been selected</Row>
+            </Offcanvas.Body>
+          </Fragment>
         )}
       </Offcanvas>
     </Fragment>

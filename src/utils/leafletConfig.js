@@ -1,4 +1,7 @@
 import L from 'leaflet';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCameraRetro } from '@fortawesome/free-solid-svg-icons';
+import ReactDOMServer from 'react-dom/server';
 
 export const theme = {
   attribution:
@@ -36,7 +39,7 @@ export const redIcon = new L.Icon({
 });
 
 export const cameraIcon = new L.divIcon({
-  html: '📷',
+  html: ReactDOMServer.renderToString(<FontAwesomeIcon icon={faCameraRetro} />),
   iconSize: [20, 20],
   className: 'cameraMarker'
 });

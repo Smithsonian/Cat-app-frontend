@@ -5,6 +5,8 @@ import Row from 'react-bootstrap/Row';
 import Form from 'react-bootstrap/Form';
 import Alert from 'react-bootstrap/Alert';
 import Button from 'react-bootstrap/Button';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faUser } from '@fortawesome/free-solid-svg-icons';
 import { v4 as uuid_v4 } from 'uuid';
 import { AuthContext } from '../../context/AuthContext';
 
@@ -16,6 +18,7 @@ const NewUserCanvas = () => {
     role: 'user'
   };
   const {
+    reset,
     register,
     handleSubmit,
     formState: { errors }
@@ -28,6 +31,7 @@ const NewUserCanvas = () => {
   const onSubmit = async data => {
     await createUser(data);
     toggleShow();
+    reset(initial);
   };
 
   return (
@@ -45,7 +49,7 @@ const NewUserCanvas = () => {
           right: 5
         }}
       >
-        👤
+        <FontAwesomeIcon icon={faUser} />
       </Button>
       <Offcanvas show={show} onHide={toggleShow} placement='end'>
         <Offcanvas.Header closeButton>

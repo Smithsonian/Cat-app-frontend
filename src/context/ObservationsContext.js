@@ -17,6 +17,7 @@ const ObservationState = ({ children }) => {
   const [searchForm, setSearchForm] = useState(initialForm);
   const [queryMainMap, setQueryMainMap] = useState(initialForm);
   const [loadingMap, observationsMap, setObservationsMap] = useObservations(queryMainMap, true);
+  const [loadingCandidates, setLoadingCandidates] = useState(false);
   const [queryCandidates, setQueryCandidates] = useState({});
   const [candidates, setCandidates] = useState([]);
 
@@ -72,12 +73,14 @@ const ObservationState = ({ children }) => {
 
   const getCandidates = useCallback(async () => {
     if (axios.defaults.headers.common['token']) {
+      setLoadingCandidates(true);
       try {
         const { data } = await axios.post(
           `${process.env.REACT_APP_OBSERVATION_API}/observations/candidates`,
           queryCandidates
         );
         setCandidates(data);
+        setLoadingCandidates(false);
       } catch ({ response }) {
         if (response) {
           const {
@@ -85,9 +88,11 @@ const ObservationState = ({ children }) => {
           } = response;
           if (error) {
             toast.error(error);
+            setLoadingCandidates(false);
           }
         } else {
           toast.error('Network error');
+          setLoadingCandidates(false);
           setTimeout(() => {
             signOut();
           }, 3000);
@@ -266,6 +271,7 @@ const ObservationState = ({ children }) => {
         searchForm,
         setSearchForm,
         candidates,
+        loadingCandidates,
         setQueryCandidates,
         currentObservation,
         setCurrentObservation,

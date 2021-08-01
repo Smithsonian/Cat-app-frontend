@@ -67,12 +67,7 @@ const Map = () => {
         }) => (
           <Marker key={deployment_id} position={[lat, lng]} icon={cameraIcon} zIndexOffset={-1000}>
             <Popup>
-              <Button
-                as={Link}
-                to={`/deployment/${deployment_id}`}
-                style={{ color: '#fff !important' }}
-                className='text-decoration-none'
-              >
+              <Button as={Link} to={`/deployment/${deployment_id}`}>
                 Deployment: {deployment_id}
               </Button>
             </Popup>

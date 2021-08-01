@@ -3,16 +3,23 @@ import Offcanvas from 'react-bootstrap/Offcanvas';
 import Row from 'react-bootstrap/Row';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
-import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { v4 as uuid_v4 } from 'uuid';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import { ObservationContext } from '../../context/ObservationsContext';
-import { patternList, genericList, sexList } from '../../utils/searchFormHelpers';
+import { patternList, genericList } from '../../utils/searchFormHelpers';
 
 const FilterCanvas = ({ currentObservation }) => {
   const { setQueryCandidates } = useContext(ObservationContext);
-  const [matchFilter, setMatchFilter] = useState(currentObservation);
-  const { pattern, bicolor, longHair, sex, notched, collar } = matchFilter;
+  const [matchFilter, setMatchFilter] = useState({
+    pattern: currentObservation.pattern,
+    bicolor: currentObservation.bicolor,
+    longHair: currentObservation.longHair,
+    coordinates: currentObservation.location.coordinates,
+    distance: 0.5
+  });
+  const { pattern, bicolor, longHair, distance } = matchFilter;
   const [edited, setEdited] = useState(false);
   const [show, setShow] = useState(false);
   const toggleShow = () => setShow(prev => !prev);
@@ -30,6 +37,7 @@ const FilterCanvas = ({ currentObservation }) => {
     if (!edited) return toast.info(`Filters haven't changed`);
     setQueryCandidates(prev => ({ ...prev, ...matchFilter }));
     setEdited(false);
+    toggleShow();
   };
 
   return (
@@ -47,15 +55,10 @@ const FilterCanvas = ({ currentObservation }) => {
           right: 5
         }}
       >
-        🐈
+        <FontAwesomeIcon icon={faSearch} />
       </Button>
       <Offcanvas show={show} onHide={toggleShow} placement='end'>
         <Fragment>
-          <Offcanvas.Header closeButton>
-            <Offcanvas.Title as={Link} to={`/observation/${currentObservation._id}`}>
-              Observation: {currentObservation._id}
-            </Offcanvas.Title>
-          </Offcanvas.Header>
           <Offcanvas.Body>
             <Form onSubmit={handleSubmit}>
               <Row className='align-items-center'>
@@ -89,35 +92,16 @@ const FilterCanvas = ({ currentObservation }) => {
                     ))}
                   </Form.Select>
                 </Form.Group>
-                <Form.Group className='mb-3' controlId='sex'>
-                  <Form.Label>Sex:</Form.Label>
-                  <Form.Select name='sex' value={sex} onChange={handleChange}>
-                    {sexList.map(option => (
-                      <option key={uuid_v4()} value={option}>
-                        {option}
-                      </option>
-                    ))}
-                  </Form.Select>
-                </Form.Group>
-                <Form.Group className='mb-3' controlId='notched'>
-                  <Form.Label>Notched ear:</Form.Label>
-                  <Form.Select name='notched' value={notched} onChange={handleChange}>
-                    {genericList.map(option => (
-                      <option key={uuid_v4()} value={option}>
-                        {option}
-                      </option>
-                    ))}
-                  </Form.Select>
-                </Form.Group>
-                <Form.Group className='mb-3' controlId='collar'>
-                  <Form.Label>Collar:</Form.Label>
-                  <Form.Select name='collar' value={collar} onChange={handleChange}>
-                    {genericList.map(option => (
-                      <option key={uuid_v4()} value={option}>
-                        {option}
-                      </option>
-                    ))}
-                  </Form.Select>
+                <Form.Group className='mb-3' controlId='longHair'>
+                  <Form.Label>Radius: {distance} km</Form.Label>
+                  <Form.Range
+                    name='distance'
+                    value={distance}
+                    onChange={handleChange}
+                    min={0.01}
+                    max={1.0}
+                    step={0.01}
+                  ></Form.Range>
                 </Form.Group>
               </Row>
               <Row className='mt-5'>

@@ -103,7 +103,9 @@ const SingleObservationDetails = ({ currentObservation, fullscreen }) => {
                 thumbnailPosition='left'
                 items={currentObservation.images.map(image => ({
                   fullscreen: `${process.env.REACT_APP_IMAGE_BUCKET}/${image.image_id}_o.jpg`,
-                  original: `${process.env.REACT_APP_IMAGE_BUCKET}/${image.image_id}_m.jpg`,
+                  original: `${process.env.REACT_APP_IMAGE_BUCKET}/${image.image_id}_${
+                    fullscreen ? 'o' : 'm'
+                  }.jpg`,
                   thumbnail: `${process.env.REACT_APP_IMAGE_BUCKET}/${image.image_id}_m.jpg`
                 }))}
               />

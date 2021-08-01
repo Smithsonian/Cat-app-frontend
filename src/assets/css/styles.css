@@ -7,7 +7,20 @@
   min-height: calc(100vh - 80px);
 }
 
+.leaflet-container a {
+  color: #fff;
+}
+
 .map-static {
   height: 250px !important;
   min-height: 250px;
+}
+
+.carousel-indicators {
+  bottom: 15px;
+}
+
+.carousel-indicators [data-bs-target] {
+  height: 10px;
+  background-color: rgb(255, 84, 5);
 }
