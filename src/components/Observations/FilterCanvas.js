@@ -45,7 +45,7 @@ const FilterCanvas = ({ currentObservation }) => {
       <Button
         variant='success'
         onClick={toggleShow}
-        className='position-absolute rounded-circle'
+        className='position-fixed rounded-circle'
         style={{
           zIndex: '10000',
           width: '4rem',

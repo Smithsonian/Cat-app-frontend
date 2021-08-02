@@ -56,7 +56,7 @@ const SearchCanvas = () => {
       <Button
         variant='warning'
         onClick={toggleShow}
-        className='position-absolute rounded-circle'
+        className='position-fixed rounded-circle'
         style={{
           zIndex: '10000',
           width: '4rem',
