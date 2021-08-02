@@ -5,6 +5,8 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import { v4 as uuid_v4 } from 'uuid';
 import { toast } from 'react-toastify';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faLightbulb } from '@fortawesome/free-solid-svg-icons';
 import { ObservationContext } from '../../context/ObservationsContext';
 import ProtocolModal from './ProtocolModal';
 import { patternList, genericList, sexList } from '../../utils/searchFormHelpers';
@@ -37,7 +39,7 @@ const MetadataForm = ({ currentObservation }) => {
         <Row>
           <Col xs={1}>
             <Button variant='info' onClick={() => setProtocolShow(true)}>
-              💡
+              <FontAwesomeIcon icon={faLightbulb} />
             </Button>
             <ProtocolModal show={protocolShow} onHide={() => setProtocolShow(false)} />
           </Col>
