@@ -1,36 +1,30 @@
-import { useState, useEffect, useCallback, useContext } from 'react';
+import { useState, useEffect, useContext } from 'react';
+import { useParams, Link } from 'react-router-dom';
 import axios from 'axios';
-import moment from 'moment';
-import Row from 'react-bootstrap/Row';
-import { Link, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import DataTable from 'react-data-table-component';
-import { AuthContext } from '../../context/AuthContext';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
+import moment from 'moment';
 import Loading from '../Navigation/Loading';
+import { AuthContext } from '../../context/AuthContext';
+import ObservationCanvas from '../Observations/ObservationCanvas';
+import SingleCatMap from '../Leaflet/SingleCatMap';
+import { Fragment } from 'react';
 
-const ObservationsByDeployment = () => {
-  const { signOut } = useContext(AuthContext);
-  const [loading, setLoading] = useState(false);
-  const [observations, setObservations] = useState([]);
+const Cat = () => {
   const { id } = useParams();
+  const { signOut } = useContext(AuthContext);
+  const [cat, setCat] = useState({});
+  const [loading, setLoading] = useState(false);
 
-  const getObservations = useCallback(async () => {
-    setLoading(true);
-    if (axios.defaults.headers.common['token']) {
+  useEffect(() => {
+    const getCat = async () => {
       try {
         const {
-          data: { observations }
-        } = await axios.post(`${process.env.REACT_APP_OBSERVATION_API}/observations`, {
-          deployment_id: id
-        });
-        if (observations.length === 0) {
-          toast.info('Nothing to review');
-          setObservations([]);
-          setLoading(false);
-          return;
-        }
-        setObservations(observations);
-        setLoading(false);
+          data: { cat }
+        } = await axios.get(`${process.env.REACT_APP_OBSERVATION_API}/observations/cat/${id}`);
+        setCat(cat);
       } catch ({ response }) {
         if (response) {
           const {
@@ -38,9 +32,7 @@ const ObservationsByDeployment = () => {
           } = response;
           if (error) {
             toast.error(error);
-            setTimeout(() => {
-              signOut();
-            }, 3000);
+            setLoading(false);
           }
         } else {
           toast.error('Network error');
@@ -49,12 +41,9 @@ const ObservationsByDeployment = () => {
           }, 3000);
         }
       }
-    }
-  }, [signOut, id]);
-
-  useEffect(() => {
-    getObservations();
-  }, [getObservations]);
+    };
+    getCat();
+  }, [id, signOut]);
 
   const columns = [
     {
@@ -63,8 +52,10 @@ const ObservationsByDeployment = () => {
       sortable: true
     },
     {
-      name: 'Cat ID',
-      selector: ({ specimen }) => <Link to={`/cat/${specimen}`}>{specimen}</Link>
+      name: 'Deployment ID',
+      selector: ({ deployment_id }) => (
+        <Link to={`/deployment/${deployment_id}`}>{deployment_id}</Link>
+      )
     },
     {
       name: 'Date',
@@ -83,14 +74,24 @@ const ObservationsByDeployment = () => {
       <Loading />
     </Row>
   ) : (
-    <DataTable
-      title={`Observations on deployment: ${id}`}
-      columns={columns}
-      data={observations}
-      pagination
-      highlightOnHover
-    />
+    <Fragment>
+      <Row>
+        <ObservationCanvas />
+        <Col>
+          <DataTable
+            title={`Cat: ${id}`}
+            columns={columns}
+            data={cat.matches}
+            pagination
+            highlightOnHover
+          />
+        </Col>
+        <Col>
+          <SingleCatMap observations={cat.matches} />
+        </Col>
+      </Row>
+    </Fragment>
   );
 };
 
-export default ObservationsByDeployment;
+export default Cat;

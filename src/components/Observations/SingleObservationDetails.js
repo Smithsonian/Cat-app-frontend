@@ -115,7 +115,9 @@ const SingleObservationDetails = ({ currentObservation, fullscreen }) => {
                 <Row className='justify-content-around mb-3'>
                   {currentObservation.specimen ? (
                     <Fragment>
-                      <Button className='mb-3'>Specimen ID: {currentObservation.specimen}</Button>
+                      <Button as={Link} to={`/cat/${currentObservation.specimen}`} className='mb-3'>
+                        Specimen ID: {currentObservation.specimen}
+                      </Button>
                       <Button
                         onClick={() => removeIdentification(currentObservation._id)}
                         variant='danger'

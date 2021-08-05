@@ -29,7 +29,7 @@ const ObservationCanvas = () => {
       >
         <FontAwesomeIcon icon={faCat} />
       </Button>
-      <Offcanvas show={showCanvas} onHide={toggleShow} placement='end'>
+      <Offcanvas show={showCanvas} onHide={toggleShow} placement='end' className='canvas'>
         {currentObservation ? (
           <Fragment>
             <Offcanvas.Header closeButton>

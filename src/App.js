@@ -10,6 +10,7 @@ import ObservationsByDeployment from './components/Observations/ObservationsByDe
 import ObservationsForReview from './components/Observations/ObservationsForReview';
 import SingleObservation from './components/Observations/SingleObservation';
 import MatchObservation from './components/Observations/MatchObservation';
+import Cat from './components/Cat/Cat';
 import './assets/css/styles.css';
 
 const App = () => {
@@ -24,6 +25,7 @@ const App = () => {
         <ProtectedRoute exact path='/deployment/:id' component={ObservationsByDeployment} />
         <ProtectedRoute exact path='/review' admin component={ObservationsForReview} />
         <ProtectedRoute exact path='/match/:id' component={MatchObservation} />
+        <ProtectedRoute exact path='/cat/:id' component={Cat} />
         <ProtectedRoute exact path='/admin' admin component={Admin} />
       </Switch>
     </Fragment>

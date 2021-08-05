@@ -51,7 +51,7 @@ const NewUserCanvas = () => {
       >
         <FontAwesomeIcon icon={faUser} />
       </Button>
-      <Offcanvas show={show} onHide={toggleShow} placement='end'>
+      <Offcanvas show={show} onHide={toggleShow} placement='end' className='canvas'>
         <Offcanvas.Header closeButton>
           <Offcanvas.Title>Add new user</Offcanvas.Title>
         </Offcanvas.Header>

@@ -68,7 +68,7 @@ const SearchCanvas = () => {
       >
         <FontAwesomeIcon icon={faSearch} />
       </Button>
-      <Offcanvas show={show} onHide={toggleShow} placement='start'>
+      <Offcanvas show={show} onHide={toggleShow} placement='start' className='canvas'>
         <Offcanvas.Header closeButton>
           <Offcanvas.Title>Filter observations</Offcanvas.Title>
         </Offcanvas.Header>

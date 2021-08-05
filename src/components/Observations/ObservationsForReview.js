@@ -67,7 +67,7 @@ const ObservationsForReview = () => {
     },
     {
       name: 'Cat ID',
-      selector: ({ specimen }) => specimen
+      selector: ({ specimen }) => <Link to={`/cat/${specimen}`}>{specimen}</Link>
     },
     {
       name: 'Date',

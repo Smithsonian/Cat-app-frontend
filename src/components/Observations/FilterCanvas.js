@@ -57,7 +57,7 @@ const FilterCanvas = ({ currentObservation }) => {
       >
         <FontAwesomeIcon icon={faSearch} />
       </Button>
-      <Offcanvas show={show} onHide={toggleShow} placement='end'>
+      <Offcanvas show={show} onHide={toggleShow} placement='end' className='canvas'>
         <Fragment>
           <Offcanvas.Body>
             <Form onSubmit={handleSubmit}>

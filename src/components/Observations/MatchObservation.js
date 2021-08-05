@@ -24,6 +24,7 @@ const MatchObservation = () => {
     setCurrentObservation,
     setQueryCandidates,
     removeIdentification,
+    saveNewCat,
     candidates
   } = useContext(ObservationContext);
   const { id } = useParams();
@@ -110,7 +111,7 @@ const MatchObservation = () => {
             </Col>
             <Col>
               <Row className='justify-content-around'>
-                {currentObservation.specimen && (
+                {currentObservation.specimen ? (
                   <Fragment>
                     <Button className='mb-3'>Specimen ID: {currentObservation.specimen}</Button>
                     <Button
@@ -118,6 +119,12 @@ const MatchObservation = () => {
                       variant='danger'
                     >
                       Delete ID
+                    </Button>
+                  </Fragment>
+                ) : (
+                  <Fragment>
+                    <Button className='mb-3' onClick={() => saveNewCat(currentObservation._id)}>
+                      Save as new cat
                     </Button>
                   </Fragment>
                 )}
