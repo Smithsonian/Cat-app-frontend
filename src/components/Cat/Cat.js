@@ -1,16 +1,19 @@
-import { useState, useEffect, useContext } from 'react';
+import { Fragment, useState, useEffect, useContext } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import DataTable from 'react-data-table-component';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import Button from 'react-bootstrap/Button';
+import Carousel from 'react-bootstrap/Carousel';
+import ImageGallery from 'react-image-gallery';
 import moment from 'moment';
 import Loading from '../Navigation/Loading';
 import { AuthContext } from '../../context/AuthContext';
 import ObservationCanvas from '../Observations/ObservationCanvas';
 import SingleCatMap from '../Leaflet/SingleCatMap';
-import { Fragment } from 'react';
+import { renderLeftNav, renderRightNav } from '../../utils/imageGalleryHelpers';
 
 const Cat = () => {
   const { id } = useParams();
@@ -75,17 +78,46 @@ const Cat = () => {
     </Row>
   ) : (
     <Fragment>
-      <Row>
+      <Row className='mb-5'>
         <ObservationCanvas />
-        <Col>
+        <Col lg='8'>
           <DataTable
             title={`Cat: ${id}`}
             columns={columns}
             data={cat.matches}
             pagination
+            paginationPerPage={5}
             highlightOnHover
           />
         </Col>
+        <Col lg={4}>
+          <Carousel fade controls={false}>
+            {cat.matches &&
+              cat.matches.map(observation => (
+                <Carousel.Item key={observation._id}>
+                  <ImageGallery
+                    lazyLoad={true}
+                    showPlayButton={false}
+                    renderLeftNav={renderLeftNav}
+                    renderRightNav={renderRightNav}
+                    thumbnailPosition='left'
+                    items={observation.images.map(image => ({
+                      fullscreen: `${process.env.REACT_APP_IMAGE_BUCKET}/${image.image_id}_o.jpg`,
+                      original: `${process.env.REACT_APP_IMAGE_BUCKET}/${image.image_id}_o.jpg`,
+                      thumbnail: `${process.env.REACT_APP_IMAGE_BUCKET}/${image.image_id}_m.jpg`
+                    }))}
+                  />
+                  <Row>
+                    <Button variant='primary' as={Link} to={`/observation/${observation._id}`}>
+                      Observation: {observation._id}
+                    </Button>
+                  </Row>
+                </Carousel.Item>
+              ))}
+          </Carousel>
+        </Col>
+      </Row>
+      <Row>
         <Col>
           <SingleCatMap observations={cat.matches} />
         </Col>

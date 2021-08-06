@@ -9,7 +9,7 @@ const SingleCatMap = ({ observations }) => {
   const { setCurrentObservation, setShowCanvas } = useContext(ObservationContext);
 
   return (
-    <MapContainer center={[38.9072, -77.0369]} zoom={13}>
+    <MapContainer center={[38.9072, -77.0369]} zoom={12} className='single-cat-map'>
       <TileLayer {...theme} />
       <MarkerClusterGroup key={uuid_v4()} zIndexOffset={1000}>
         {observations &&

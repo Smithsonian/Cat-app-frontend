@@ -7,6 +7,10 @@
   min-height: calc(100vh - 80px);
 }
 
+.single-cat-map {
+  min-height: calc(50vh - 80px) !important;
+}
+
 .map-static {
   height: 250px !important;
   min-height: 250px;
