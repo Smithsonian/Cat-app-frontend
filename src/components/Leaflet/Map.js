@@ -13,7 +13,9 @@ import {
   getNewBoundsEdit,
   greenIcon,
   redIcon,
-  cameraIcon
+  cameraIcon,
+  bounds,
+  center
 } from '../../utils/leafletConfig';
 
 const Map = () => {
@@ -40,13 +42,10 @@ const Map = () => {
 
   return (
     <MapContainer
-      center={[38.9072, -77.0369]}
+      center={center}
       zoom={13}
       scrollWheelZoom={true}
-      bounds={[
-        [50.505, -29.09],
-        [52.505, 29.09]
-      ]}
+      bounds={bounds}
       className='leaflet-container'
     >
       <FeatureGroup>

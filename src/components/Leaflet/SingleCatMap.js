@@ -3,13 +3,13 @@ import { MapContainer, TileLayer, Marker } from 'react-leaflet';
 import MarkerClusterGroup from 'react-leaflet-markercluster';
 import { v4 as uuid_v4 } from 'uuid';
 import { ObservationContext } from '../../context/ObservationsContext';
-import { theme, greenIcon, redIcon } from '../../utils/leafletConfig';
+import { theme, greenIcon, redIcon, center } from '../../utils/leafletConfig';
 
 const SingleCatMap = ({ observations }) => {
   const { setCurrentObservation, setShowCanvas } = useContext(ObservationContext);
 
   return (
-    <MapContainer center={[38.9072, -77.0369]} zoom={12} className='single-cat-map'>
+    <MapContainer center={center} zoom={12} className='single-cat-map'>
       <TileLayer {...theme} />
       <MarkerClusterGroup key={uuid_v4()} zIndexOffset={1000}>
         {observations &&

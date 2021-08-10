@@ -62,3 +62,9 @@ export const getNewBoundsEdit = ({ layers: { _layers } }) => {
   } = Object.values(_layers)[0];
   return { minLon, maxLon, minLat, maxLat };
 };
+
+export const center = [38.9072, -77.0369];
+export const bounds = [
+  [50.505, -29.09],
+  [52.505, 29.09]
+];
