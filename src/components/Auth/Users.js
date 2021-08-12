@@ -4,10 +4,12 @@ import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import Badge from 'react-bootstrap/Badge';
 import DataTable from 'react-data-table-component';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faUserTag, faUnlock, faLock, faKey } from '@fortawesome/free-solid-svg-icons';
 import { AuthContext } from '../../context/AuthContext';
 
 const Users = () => {
-  const { usersInApp, toggleRole, toggleStatus } = useContext(AuthContext);
+  const { usersInApp, toggleRole, toggleStatus, changePassword } = useContext(AuthContext);
 
   const columns = [
     {
@@ -37,17 +39,22 @@ const Users = () => {
       )
     },
     {
-      name: 'Actions',
-      selector: ({ _id }) => (
+      name: 'Change role | Change status | Send new password',
+      selector: ({ _id, active }) => (
         <Row>
           <Col>
             <Button variant='info' onClick={() => toggleRole(_id)}>
-              Toggle role
+              <FontAwesomeIcon icon={faUserTag} />
             </Button>
           </Col>
           <Col>
-            <Button variant='danger' onClick={() => toggleStatus(_id)}>
-              Toggle status
+            <Button variant={active ? 'success' : 'danger'} onClick={() => toggleStatus(_id)}>
+              <FontAwesomeIcon icon={active ? faUnlock : faLock} />
+            </Button>
+          </Col>
+          <Col>
+            <Button variant='warning' onClick={() => changePassword(_id)}>
+              <FontAwesomeIcon icon={faKey} />
             </Button>
           </Col>
         </Row>

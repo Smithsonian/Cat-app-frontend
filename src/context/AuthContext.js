@@ -99,6 +99,33 @@ const AuthState = ({ children }) => {
     }
   };
 
+  const changePassword = async id => {
+    setLoading(true);
+    try {
+      const { data } = await axios.patch(
+        `${process.env.REACT_APP_OBSERVATION_API}/auth/password/${id}`
+      );
+
+      toast.success(`User's password updated`);
+      setUsersInApp(prev => prev.map(u => (u._id === id ? data : u)));
+      setLoading(false);
+    } catch ({ response }) {
+      if (response) {
+        const {
+          data: { error }
+        } = response;
+        if (error) {
+          toast.error(error);
+          setLoading(false);
+        }
+      } else {
+        toast.error('Network error');
+        setLoading(false);
+        setTimeout(() => signOut(), 3000);
+      }
+    }
+  };
+
   const signIn = async credentials => {
     setLoading(true);
     try {
@@ -240,6 +267,7 @@ const AuthState = ({ children }) => {
         createUser,
         toggleStatus,
         toggleRole,
+        changePassword,
         signIn,
         signOut
       }}
